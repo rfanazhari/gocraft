@@ -140,7 +140,7 @@ The agent stops speculative changes after two unexplained failures, reports the 
 
 - The implemented change and affected code/artifacts
 - Ticket ID (when required)
-- Each phase's type and commit SHA
+- Each phase's commit SHA and actual subject, verified against the full [commit-message convention](references/git-documentation.md#phase-commit-message-gate)
 - The exact RED command, working directory, and observed reason (features/fixes), or the agreed exception plus pre/post GREEN evidence (pure refactors)
 - Local check results, clearly separated into **passed**, **failed**, **blocked / not run**, and **not applicable**
 - Blockers and downstream obligations still pending (docs, review)
@@ -197,7 +197,7 @@ Agents load these on demand, not all at once. The full index with ownership and 
 | [testing.md](references/testing.md) | Before adding/editing tests |
 | [red-green.md](references/red-green.md) | Before design/implementation and its checkpoint |
 | [verification.md](references/verification.md) | Planning evidence or accepting results |
-| [git-documentation.md](references/git-documentation.md) | Workspace recovery or downstream docs/Git work |
+| [git-documentation.md](references/git-documentation.md) | Before every phase commit; workspace recovery or downstream docs/Git work |
 
 **Authority:** explicit user directions govern the work; these references are the agreed base standard; the target repo's own instructions and config establish current implementation facts but do not silently override intended behavior. Material conflicts are recorded and settled before dependent work.
 

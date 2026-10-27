@@ -17,6 +17,8 @@ The same file may appear in both commits: RED can introduce a constructor stub, 
 
 Before each commit, inspect `git status --short`, `git diff --cached --stat` and the full `git diff --cached`. Stage explicit paths/hunks and preserve unrelated staged/unstaged user work; use an isolated index/worktree when unrelated changes are already staged. Test the exact staged snapshot in an isolated temporary workspace if it differs from the tested working tree. A RED log from an earlier state does not validate a staged snapshot containing later implementation. Confirm the committed snapshot matches the tested snapshot; if a hook changes it, rerun the phase checks before proceeding. Keep checkpoint history intact; report an invalid existing checkpoint rather than rewriting user commits.
 
+Every phase commit also requires the [phase commit message gate](git-documentation.md#phase-commit-message-gate). Resolve the full convention before the first checkpoint, validate it before each commit, and verify the actual subject afterward. References below to a ticket or phase marker are fields within that full convention, not a shorter alternative format.
+
 ## User-supplied ticket gate
 
 A ticket ID is mandatory before entering change design (scope point 3) or task implementation (scope point 4), including RED or characterization tests for that implementation. These points refer to the agreed scope responsibilities, not the internal section numbers in the workflow reference.
@@ -29,10 +31,10 @@ Context gathering/setup alone and verification-only execution (scope point 5) do
 
 1. Establish the intended scenario and agreed pipeline/check scope from the task context. Preserve the applicable contract and existing tests.
 2. Write the RED test and only the minimum executable scaffolding needed to run it. Run the relevant local test/check pipeline and observe failure caused by the missing behavior or regression being addressed.
-3. Record the exact command/runner, working directory, scenario and observed reason. Apply the phase-boundary checks above and commit the RED checkpoint once using the supplied ticket ID. Record its SHA before writing GREEN behavior.
+3. Record the exact command/runner, working directory, scenario and observed reason. Apply the phase-boundary and message checks above and commit the RED checkpoint once. Verify and record its actual subject and SHA before writing GREEN behavior.
 4. Implement the required behavior after the RED checkpoint. Preserve meaningful assertions; do not weaken or disable the test merely to pass.
 5. Run the same relevant pipeline/scenario to demonstrate GREEN, plus applicable mandatory checks. Fix in-scope failures and report actual outcomes and remaining limitations.
-6. Apply the staging checks above and commit the verified implementation once with the ticket ID, `GREEN` marker and actual change type. Record its SHA and the RED → GREEN relationship.
+6. Apply the staging and message checks above and commit the verified implementation once using the same resolved convention. Verify and record its actual subject, SHA and the RED → GREEN relationship.
 
 An unexpected toolchain, syntax, credential or resource failure is not valid behavioral RED. A pipeline that was not executed is not RED evidence. Expected RED is an intermediate checkpoint, not permission to report the implementation complete with failing checks.
 
@@ -63,4 +65,4 @@ A verification-only request reports existing check outcomes; it does not invent 
 
 ## Core evidence
 
-Include the supplied ticket ID when required, each phase's type/SHA and local command/results. For features/fixes include the observed RED reason, any non-test RED scaffolding and why it was required, and subsequent GREEN. For pure refactors include why the exception applies, pre-refactor GREEN, any characterization coverage and post-refactor GREEN. If required lint/security or other mandatory checks fail, distinguish passing scenario tests from incomplete GREEN verification and report the blocker without a GREEN completion claim. Source review, an intended command or a commit message alone is not proof of a pipeline result.
+Include the supplied ticket ID when required, each phase's SHA/actual commit subject and local command/results. For features/fixes include the observed RED reason, any non-test RED scaffolding and why it was required, and subsequent GREEN. For pure refactors include why the exception applies, pre-refactor GREEN, any characterization coverage and post-refactor GREEN. If required lint/security or other mandatory checks fail, distinguish passing scenario tests from incomplete GREEN verification and report the blocker without a GREEN completion claim. Source review, an intended command or a commit message alone is not proof of a pipeline result.

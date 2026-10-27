@@ -2,6 +2,12 @@
 
 This document records package checks and their limits. The historical reference-package snapshot predates `SKILL.md`; the later per-phase correction has separate evidence below.
 
+## Commit-message correction checks — 2026-10-27
+
+Local history confirmed that `83a0f27` and `55c66f1` used ticket/phase-only subjects while the preceding phase commits used the complete type/bracket/phase convention. Inspection found that the complete template was under additional Git actions and phase steps mentioned a narrower set of fields. The correction gives message validation its own mandatory section and links it from both phase steps and verification.
+
+Metadata validation and package link/fragment, containment, reachability, formatting and isolated-copy hash checks passed after this correction. The target history was read without modification. These are document checks and direct evidence of the reported mismatch; fresh-agent adherence to the revised message gate remains untested.
+
 ## Per-phase correction checks — 2026-10-27
 
 The skill metadata validator passed after the local-trial correction. Local Markdown links/fragments, containment, reachability, fences, whitespace and file hashes were checked in the source package and an isolated copy. Operational references were reviewed for consistent local RED/GREEN commits and preserved pure-refactor/verification-only exceptions.

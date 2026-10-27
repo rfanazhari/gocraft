@@ -11,7 +11,7 @@ Use the supplied context and verification plan directly when sufficient; select 
 | Architecture | Required: review responsibilities, inward dependencies and active wiring; run existing applicable architecture checks. No new universal checking framework is implied. |
 | Specific tests | Required after test edits, before the applicable unit suite. |
 | TDD | Required for additions/changes in mandatory unit-test directories: tests precede implementation, with context-appropriate RED/GREEN or before/after refactor evidence. |
-| Test checkpoint and ticket | Design/implementation requires the supplied ticket. Features/fixes record local RED → one RED commit/SHA → GREEN and required checks → one GREEN commit/SHA; already-correct pure refactors use the agreed verified GREEN test checkpoint → refactor → verified GREEN refactor commit under [red-green.md](red-green.md). Verification-only requests do not add a ticket/checkpoint requirement. |
+| Test checkpoint and ticket | Design/implementation requires the supplied ticket. Features/fixes record local RED → one RED commit/SHA → GREEN and required checks → one GREEN commit/SHA; already-correct pure refactors use the agreed verified GREEN test checkpoint → refactor → verified GREEN refactor commit under [red-green.md](red-green.md). Each phase's actual subject must pass the [message gate](git-documentation.md#phase-commit-message-gate). Verification-only requests do not add a ticket/checkpoint requirement. |
 | Unit suite | Required: run the target's actual applicable suite, including domain/application responsibilities. Inspect what its command covers. |
 | Runtime packages | Recommended: `go test ./...` from the affected module to cover compilation of runtime packages as well; account for explicit integration tags/resources. |
 | Lint | Required: compatible target lint command, or appropriately configured `golangci-lint run`. |
@@ -84,7 +84,7 @@ Fix in-scope findings and rerun affected checks. Record independent debt without
 - Final observable behavior and important changed files.
 - Implementation criteria/evidence and material decisions/conflicts; include workspace/base when needed to identify the result.
 - Actual commands, working directories and outcomes; summarize logs without secrets.
-- Include the supplied ID when design/implementation triggers the ticket gate; report each phase's type/SHA and local results. Features/fixes need RED evidence and subsequent GREEN; pure refactors need the exception reason and pre/post GREEN evidence.
+- Include the supplied ID when design/implementation triggers the ticket gate; report each phase's SHA/actual commit subject and local results. Features/fixes need RED evidence and subsequent GREEN; pure refactors need the exception reason and pre/post GREEN evidence.
 - Runtime/resource/CI limits, unresolved items and concrete follow-up prerequisites.
 - Required pending documentation, independent review, full handoff or other downstream responsibilities, with their effect on overall task readiness.
 

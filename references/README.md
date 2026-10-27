@@ -20,7 +20,7 @@ The skill entry point is [SKILL.md](../SKILL.md). It defines core execution and 
 | [testing.md](testing.md) | Before adding/editing tests or implementing covered code | TDD, refactors, public tests, fixtures, generated mocks, execution order. |
 | [red-green.md](red-green.md) | Before change design/implementation and its test checkpoint | Ticket gate; one commit per completed phase; RED scaffolding boundaries and staged-snapshot evidence; agreed pure-refactor exception. |
 | [verification.md](verification.md) | Planning evidence or accepting results | Test/lint/security gates, runtime evidence, failures, review and handoff. |
-| [git-documentation.md](git-documentation.md) | Conditional workspace recovery or downstream documentation/Git work | Phase commit conventions and conditional workspace/Git work; comprehensive documentation/review/handoff are subskill candidates. |
+| [git-documentation.md](git-documentation.md) | Before every phase commit; conditional workspace recovery or downstream documentation/Git work | Mandatory message gate, convention discovery and actual-subject verification; conditional workspace/Git and documentation conventions. |
 | [sources.md](sources.md) | Auditing or maintaining this package only | Provenance and settled source conflicts. |
 | [validation.md](validation.md) | Reviewing package readiness or maintaining navigation | Isolation checks and limits of validation. |
 
