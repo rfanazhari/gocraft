@@ -2,7 +2,7 @@
 
 > An agent skill for **shipping a scoped change in an existing Go module** — feature, bug fix, refactor, or verification-only — with RED/GREEN evidence instead of a brand-new repo.
 
-Gocraft keeps an AI coding agent (built for [Cursor](https://cursor.com)) inside the lines of a real Go codebase: it asks for the ticket first, maps clean-architecture layers onto the packages that **already exist**, settles the HTTP/gRPC contract before the handler, and proves the change with local test checkpoints.
+Gocraft keeps an AI coding agent inside the lines of a real Go codebase. It is a plain `SKILL.md` package, so it works with any agent that supports the skills format (Cursor, Claude Code, and others): it asks for the ticket first, maps clean-architecture layers onto the packages that **already exist**, settles the HTTP/gRPC contract before the handler, and proves the change with local test checkpoints.
 
 ```
 brief + ticket + existing Go tree  →  /gocraft  →  RED → commit → GREEN, not a new service
@@ -47,17 +47,17 @@ Push, remote CI, MR/PR creation, deployment, documentation sync, and comprehensi
 
 ## Install
 
-Requires [Node.js](https://nodejs.org/) (Skills CLI needs 22.20+). Run the commands from the **Go project** where you want the agent to load gocraft, not necessarily from this repo.
+Requires [Node.js](https://nodejs.org/) (Skills CLI needs 22.20+). Run the commands from the **Go project** where you want the agent to load gocraft, not necessarily from this repo. Replace `<agent>` with your agent's name (for example `cursor` or `claude-code`); `npx skills add --help` lists the supported ones.
 
 ```bash
 # Project-level, committed with the team (default)
-npx skills add rfanazhari/gocraft --skill gocraft -a cursor
+npx skills add rfanazhari/gocraft --skill gocraft -a <agent>
 
-# Global, every Cursor project on this machine
-npx skills add rfanazhari/gocraft --skill gocraft -a cursor -g
+# Global, every project on this machine
+npx skills add rfanazhari/gocraft --skill gocraft -a <agent> -g
 
 # From a local checkout while you edit the skill
-npx skills add /path/to/gocraft --skill gocraft -a cursor
+npx skills add /path/to/gocraft --skill gocraft -a <agent>
 ```
 
 Manage it:
@@ -68,28 +68,32 @@ npx skills update
 npx skills remove gocraft
 ```
 
-The skill is installed to `.agents/skills/` (or `~/.cursor/skills/` with `-g`). Cursor also reads `.cursor/skills/` and `~/.cursor/skills/` if you copy it manually.
+Where the skill lands depends on the agent (for example `.agents/skills/` at project level, or the agent's own global skills folder with `-g`).
 
 <details>
 <summary>Manual install (no npx)</summary>
 
-The folder must be named `gocraft` and contain `SKILL.md` plus `references/`.
+The folder must be named `gocraft` and contain `SKILL.md` plus `references/`. Clone it into your agent's skills directory:
 
 ```bash
+# Cursor
 git clone https://github.com/rfanazhari/gocraft.git ~/.cursor/skills/gocraft
+
+# Claude Code
+git clone https://github.com/rfanazhari/gocraft.git ~/.claude/skills/gocraft
 ```
 
-To link it into a single project instead:
+To link it into a single project instead (use the folder your agent reads, such as `.cursor/skills/` or `.claude/skills/`):
 
 ```bash
-ln -s /path/to/gocraft .cursor/skills/gocraft
+ln -s /path/to/gocraft .claude/skills/gocraft
 ```
 
 </details>
 
 ## Usage
 
-Start a **new Agent chat** in the Go project, then either invoke the skill with `/gocraft` or just describe the task.
+Start a **new agent session** in the Go project, then either invoke the skill with `/gocraft` (where your agent supports slash-invoked skills) or just describe the task and let the agent pick the skill up from its description.
 
 Give it a brief (FSD, technical design, or ticket notes) and a ticket ID:
 
