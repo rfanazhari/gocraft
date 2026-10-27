@@ -63,16 +63,16 @@ Complete when dependent implementation needs no hidden behavior, compatibility o
 
 Dependency: sufficient supplied context or resolved gaps; an appropriate workspace and applicable contracts are available. Do not require the optional recovery stages when these conditions are already met.
 
-Entering implementation requires the supplied ticket ID even with complete context. Use [red-green.md](red-green.md): features/fixes establish local RED → RED test commit → implementation → GREEN; already-correct pure refactors use the agreed verified GREEN test checkpoint → refactor → GREEN. Remote CI is not required.
+Entering implementation requires the supplied ticket ID even with complete context. Use [red-green.md](red-green.md): features/fixes establish local RED → one RED test commit → implementation → GREEN and required checks → one GREEN implementation commit; already-correct pure refactors use the agreed verified GREEN test checkpoint → refactor → verified GREEN refactor commit. Remote CI is not required.
 
 - Read related files and apply the Go, architecture, API/error and active-component standards.
 - Apply [testing.md](testing.md): TDD is required for additions/changes in mandatory unit-test directories for features, fixes and refactors.
-- For a pure refactor, run existing unit tests first, add characterization coverage if insufficient, establish/record the verified GREEN test checkpoint, then refactor and establish GREEN again. Apply the agreed exception directly; do not fabricate RED or request the same approval again. Separate new behavior/bugs from the pure-refactor path.
+- For a pure refactor, run existing unit tests first, add characterization coverage if insufficient, establish/record the verified GREEN test checkpoint, then refactor, establish GREEN again and commit the verified refactor once. Apply the agreed exception directly; do not fabricate RED or request the same approval again. Separate new behavior/bugs from the pure-refactor path.
 - Implement the minimum behavior, real wiring, context propagation and safe error handling. Regenerate mocks when a tested interface changes.
 - Include implementation-critical migration/schema, error/translation, dependency, generated-code and configuration artifacts required by the requested change; broader documentation synchronization belongs to the downstream boundary below.
 - Keep nearby legacy edits limited to what the task needs. After test edits, run the specific test, then the unit suite when green.
 
-Output: scoped code/tests and technical artifacts, ticket ID, test-checkpoint type/SHA and local results. Features/fixes include RED evidence; pure refactors include the exception reason and pre/post GREEN evidence.
+Output: scoped code/tests and technical artifacts, ticket ID, each phase's type/SHA and local results. Features/fixes include RED evidence; pure refactors include the exception reason and pre/post GREEN evidence.
 
 Complete when the slice passes its criteria and dependent decisions are resolved. Expected RED is intermediate evidence; environment failure is not behavioral RED.
 
@@ -109,7 +109,7 @@ Core execution is complete when requested implementation criteria and applicable
 Dependency: core implementation/verification results, including partial results if blocked.
 
 - Return a brief execution result: implemented change, affected code/artifacts, checks/outcomes, blockers and required downstream work. This is not the full handoff subskill.
-- Documentation synchronization, comprehensive review, full handoff and additional authorized Git lifecycle work follow the future subskill design or an explicit broader request. The applicable test checkpoint stays in core implementation; do not initiate other Git actions merely because core checks passed.
+- Documentation synchronization, comprehensive review, full handoff and additional authorized Git lifecycle work follow the future subskill design or an explicit broader request. The local phase commits stay in core implementation; other Git actions require their own requested scope.
 
 Output: concise, truthful core result, checkpoint evidence/SHA when applicable and any pending downstream obligations; no additional Git artifacts beyond the requested scope.
 

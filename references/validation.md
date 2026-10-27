@@ -1,6 +1,14 @@
 # Validation history and deferred skill checks
 
-This document records historical reference-package validation, not a passing result for the current skill draft or a Go task. `SKILL.md` was added after the recorded snapshot. The current request is limited to protocol finalization and entry-point creation; formal skill/package validation and behavioral trials are deferred.
+This document records package checks and their limits. The historical reference-package snapshot predates `SKILL.md`; the later per-phase correction has separate evidence below.
+
+## Per-phase correction checks — 2026-10-27
+
+The skill metadata validator passed after the local-trial correction. Local Markdown links/fragments, containment, reachability, fences, whitespace and file hashes were checked in the source package and an isolated copy. Operational references were reviewed for consistent local RED/GREEN commits and preserved pure-refactor/verification-only exceptions.
+
+The reported target commits were exported to temporary directories and tested with `go test ./domain/aggregate -count=1 -v`: `fab5027` failed on the reported account/owner scenarios and `8a4c230` passed. Removing the two new repository interfaces from the RED export left the same failing scenarios, demonstrating they were unnecessary RED scaffolding. The target working tree and history were preserved.
+
+These checks validate packaging and the reported example. They do not establish that a fresh agent follows the revised protocol, or that the target's lint/security/full suite passes.
 
 ## Isolation checks
 
@@ -32,8 +40,8 @@ Reference-package checks passed on 2026-10-27 before the subsequent local-pipeli
 
 Automated checks covered structure, navigation, isolation and selected decision markers. Content was also reviewed against the workflow and coding-standard decisions. These results are a packaging snapshot, not an executable skill evaluation; rerun the checks after edits.
 
-The user has since selected local test/check pipelines and approved the pure-refactor GREEN-checkpoint exception. The entry point and reference edits have not undergone the separate formal validation stage; historical checks do not validate the current skill or establish an executed Go pipeline.
+The user subsequently selected local test/check pipelines, approved the pure-refactor GREEN-checkpoint exception and clarified one commit per phase. The historical checks alone do not validate those later edits; see the separate correction evidence above.
 
 ## What these checks do not establish
 
-They do not validate skill metadata, installation, invocation behavior, real-task execution, dependency compilation, API/broker/database runtime semantics, or target CI. Those need a later authorized implementation/evaluation stage.
+Package checks do not establish installation, invocation behavior, fresh-agent execution, API/broker/database runtime semantics or target CI. The metadata validation and exported target tests above establish only their stated results.

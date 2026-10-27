@@ -18,17 +18,17 @@ The base branch convention is `<type>/<short-description>` with a kebab-case des
 
 Untracked requirement/source documents may not appear in a new worktree. Preserve access without automatically carrying user files into the task commit. Preparing reference documents does not itself execute a target code task.
 
-## Required test checkpoint
+## Required phase commits
 
-Features and bug fixes require the local RED pipeline to fail for the intended scenario before the RED test checkpoint commit, followed by implementation and GREEN. Pure refactors of already-correct behavior use the agreed GREEN test checkpoint before restructuring and GREEN afterward. These checkpoints are core execution; follow [red-green.md](red-green.md), not a deferred handoff subskill.
+Features and bug fixes require one RED test checkpoint commit before behavior implementation, then one GREEN implementation commit after local verification. Pure refactors of already-correct behavior use the agreed GREEN test checkpoint before restructuring and a GREEN refactor commit afterward. These commits are core execution; follow the phase boundaries, staged-snapshot checks and exceptions in [red-green.md](red-green.md).
 
-Stage only the task's RED tests and minimum supporting executable artifacts; exclude the GREEN implementation and unrelated user work. Record the commit SHA and ticket ID. Pipeline means local tests/checks: observe RED locally before committing; no push or remote CI is required for this checkpoint.
+Record each phase's commit SHA and ticket ID. Pipeline means local tests/checks: observe the intended result on the exact snapshot being committed; no push or remote CI is required.
 
 For the pure-refactor exception, commit added/changed characterization coverage as a `test` commit with a `GREEN` marker before production refactoring. If coverage is already sufficient with no task test changes, record the existing commit matching the verified tested state as the GREEN checkpoint under the protocol; do not manufacture a test diff or empty commit.
 
 ## Additional Git actions
 
-Commits beyond the applicable test checkpoint, push and MR/PR creation occur only within the user's requested scope. A test checkpoint alone does not authorize publishing a branch or creating an MR/PR. Keep one logical change per commit and avoid unrelated formatting/refactoring.
+The local RED/GREEN phase commits are included in implementation scope unless the user explicitly directs otherwise. Additional commits, push and MR/PR creation require requested scope. Phase commits alone do not authorize publishing a branch or creating an MR/PR. Keep one logical phase per commit and avoid unrelated formatting/refactoring.
 
 Follow the target's commit convention. When it has none, the base format is:
 
@@ -39,7 +39,7 @@ Follow the target's commit convention. When it has none, the base format is:
 - Obtain the author from `git config user.name`; apply the target's formatting convention.
 - Include a service bracket when the change concerns a service, without spaces between brackets in this base format.
 - Use the mandatory ticket ID supplied by the user; do not use placeholders, an absent-ticket fallback or an inferred originating-project ticket namespace.
-- Test checkpoints use uppercase `RED` for features/fixes or `GREEN` for the agreed pure-refactor exception. Requested GREEN implementation commits also use `GREEN`; the following imperative description is lowercase, without a trailing period.
+- Test checkpoints use uppercase `RED` for features/fixes or `GREEN` for the agreed pure-refactor exception. Implementation commits use `GREEN`; the following imperative description is lowercase, without a trailing period.
 - Missing ticket information blocks entering change design or task implementation, including its RED test edits and checkpoint commit. Ask for the identifier and reuse it; context/setup or verification-only work does not trigger this gate.
 
 Default examples; `alice`, `TASK-123` and `orders` are illustrative values, not inputs to reuse:
@@ -51,7 +51,7 @@ test: [alice][TASK-123] RED cover order total calculation
 test: [alice][TASK-123][orders] GREEN cover existing order behavior before refactor
 ```
 
-Use `test` for a test checkpoint. A requested GREEN implementation commit uses `feat`, `fix` or `refactor` according to the actual change. Omit the service bracket when none applies. A later implementation commit remains conditional; the agreed pure-refactor GREEN test checkpoint belongs to core execution. Follow a materially different target commit convention after resolving its requirements while retaining phase/ticket traceability.
+Use `test` for a test checkpoint. A GREEN implementation commit uses `feat`, `fix` or `refactor` according to the actual change. Omit the service bracket when none applies. Follow a materially different target commit convention after resolving its requirements while retaining phase/ticket traceability.
 
 Discover the hosting provider, available CLI, repository and target branch. No fixed provider, `main` base branch or MR/PR tool is assumed. Descriptions explain the final problem/behavior, relevant validation and material limits.
 

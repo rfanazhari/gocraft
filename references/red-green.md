@@ -1,6 +1,21 @@
 # Local test checkpoints and GREEN continuation
 
-This reference owns the user's checkpoint protocol. Features and bug fixes require valid local RED → RED checkpoint commit → implementation → local GREEN. Pure refactors with already-correct behavior use the agreed GREEN test checkpoint → refactor → GREEN exception below. Pipeline means local tests/checks; remote CI is not the checkpoint runner.
+This reference owns the user's checkpoint protocol. Features and bug fixes require valid local RED → one RED commit → implementation → local GREEN and required checks → one GREEN commit. Pure refactors with already-correct behavior use the agreed GREEN test checkpoint → refactor → verified GREEN implementation commit exception below. Pipeline means local tests/checks; remote CI is not the checkpoint runner.
+
+## Phase boundaries and commit contents
+
+Use the requested task or explicitly agreed implementation slice as the phase unit. Group its scenarios into one RED checkpoint and one GREEN implementation commit; test cases and test reruns do not each create a commit. Both local commits belong to core execution unless the user explicitly requests a different Git scope. A blocked phase remains incomplete; do not manufacture a commit to satisfy the count.
+
+| Phase | Commit contents | Exit condition |
+| --- | --- | --- |
+| RED | Task tests, fixtures/mocks and only declarations or inert stubs required to compile and reach the intended failing assertions. | The staged snapshot reproduces the intended behavioral failure; commit once with `RED` and record its SHA before implementing behavior. |
+| GREEN | Behavior implementation and remaining in-scope artifacts: validation, state/storage changes, parsers, repository contracts, migrations and generated/dependency changes as needed. | The RED scenario now passes and applicable mandatory checks pass; commit once with `GREEN` and record its SHA. |
+
+For every non-test hunk proposed for RED, identify the test reference that requires it. If removing the hunk leaves the scenario compilable and runnable, move that hunk to GREEN. Required type names, signatures, constants and inert return values can be scaffolding; implementing new parsing, validation, persistence or state transitions is GREEN work. An interface unused by the RED tests belongs to GREEN even when it is in the same task. Preserve existing behavior while adding scaffolding.
+
+The same file may appear in both commits: RED can introduce a constructor stub, then GREEN fills its body. Classify hunks by behavior rather than file extension or task membership.
+
+Before each commit, inspect `git status --short`, `git diff --cached --stat` and the full `git diff --cached`. Stage explicit paths/hunks and preserve unrelated staged/unstaged user work; use an isolated index/worktree when unrelated changes are already staged. Test the exact staged snapshot in an isolated temporary workspace if it differs from the tested working tree. A RED log from an earlier state does not validate a staged snapshot containing later implementation. Confirm the committed snapshot matches the tested snapshot; if a hook changes it, rerun the phase checks before proceeding. Keep checkpoint history intact; report an invalid existing checkpoint rather than rewriting user commits.
 
 ## User-supplied ticket gate
 
@@ -14,13 +29,14 @@ Context gathering/setup alone and verification-only execution (scope point 5) do
 
 1. Establish the intended scenario and agreed pipeline/check scope from the task context. Preserve the applicable contract and existing tests.
 2. Write the RED test and only the minimum executable scaffolding needed to run it. Run the relevant local test/check pipeline and observe failure caused by the missing behavior or regression being addressed.
-3. Record the exact command/runner, working directory, scenario and observed reason. Inspect the staged task files and commit the RED checkpoint using the supplied ticket ID. Record its SHA. Do not include the GREEN implementation or unrelated user work.
+3. Record the exact command/runner, working directory, scenario and observed reason. Apply the phase-boundary checks above and commit the RED checkpoint once using the supplied ticket ID. Record its SHA before writing GREEN behavior.
 4. Implement the required behavior after the RED checkpoint. Preserve meaningful assertions; do not weaken or disable the test merely to pass.
 5. Run the same relevant pipeline/scenario to demonstrate GREEN, plus applicable mandatory checks. Fix in-scope failures and report actual outcomes and remaining limitations.
+6. Apply the staging checks above and commit the verified implementation once with the ticket ID, `GREEN` marker and actual change type. Record its SHA and the RED → GREEN relationship.
 
 An unexpected toolchain, syntax, credential or resource failure is not valid behavioral RED. A pipeline that was not executed is not RED evidence. Expected RED is an intermediate checkpoint, not permission to report the implementation complete with failing checks.
 
-The test checkpoint belongs to core implementation. It does not authorize push, MR/PR creation, deployment, or a subsequent implementation commit automatically; those follow the user's requested scope. A pure-refactor GREEN test checkpoint is distinct from a later GREEN implementation commit.
+Both phase commits belong to core implementation. Push, remote CI, MR/PR creation and deployment still require separately requested scope. A pure-refactor GREEN test checkpoint is distinct from its GREEN implementation commit.
 
 ## Local pipeline meaning
 
@@ -37,7 +53,7 @@ Apply this exception only when the task preserves public behavior, that behavior
 1. Run the relevant existing unit tests before changing production code and establish GREEN. Unexpected existing failures need diagnosis; they do not establish this exception's precondition.
 2. If coverage is insufficient, add characterization tests first to lock the existing intended behavior. Run specific edited tests, then the applicable unit suite, and establish GREEN before restructuring.
 3. Commit any added/changed test coverage as a GREEN test checkpoint using the supplied ticket ID; include only task tests and necessary support, not the refactor. Record the command/results, checkpoint SHA and why RED does not apply.
-4. Perform the behavior-preserving refactor, rerun the relevant local tests and applicable mandatory checks, and establish GREEN again. Preserve the protected invariants and assertions.
+4. Perform the behavior-preserving refactor, rerun the relevant local tests and applicable mandatory checks, and establish GREEN again. Preserve the protected invariants and assertions. Commit the refactor once as a `refactor` commit with a `GREEN` marker and record its SHA.
 
 If existing coverage is already sufficient and there are no task test changes to commit, identify the existing commit matching the tested state as the verified GREEN checkpoint and record its SHA; do not manufacture an empty commit or alter tests solely to create a diff. Preserve unrelated user changes and do not claim an existing commit contains an uncommitted tested state.
 
@@ -47,4 +63,4 @@ A verification-only request reports existing check outcomes; it does not invent 
 
 ## Core evidence
 
-Include the supplied ticket ID when required, checkpoint type/SHA and local command/results. For features/fixes include the observed RED reason and subsequent GREEN. For pure refactors include why the exception applies, pre-refactor GREEN, any characterization coverage and post-refactor GREEN. Source review, an intended command or a commit message alone is not proof of a pipeline result.
+Include the supplied ticket ID when required, each phase's type/SHA and local command/results. For features/fixes include the observed RED reason, any non-test RED scaffolding and why it was required, and subsequent GREEN. For pure refactors include why the exception applies, pre-refactor GREEN, any characterization coverage and post-refactor GREEN. If required lint/security or other mandatory checks fail, distinguish passing scenario tests from incomplete GREEN verification and report the blocker without a GREEN completion claim. Source review, an intended command or a commit message alone is not proof of a pipeline result.

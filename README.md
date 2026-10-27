@@ -5,7 +5,7 @@
 Gocraft keeps an AI coding agent inside the lines of a real Go codebase. It is a plain `SKILL.md` package, so it works with any agent that supports the skills format (Cursor, Claude Code, and others): it asks for the ticket first, maps clean-architecture layers onto the packages that **already exist**, settles the HTTP/gRPC contract before the handler, and proves the change with local test checkpoints.
 
 ```
-brief + ticket + existing Go tree  →  /gocraft  →  RED → commit → GREEN, not a new service
+brief + ticket + existing Go tree  →  /gocraft  →  RED → RED commit → GREEN → GREEN commit
 ```
 
 ## Contents
@@ -29,7 +29,7 @@ General-purpose agents tend to over-deliver on Go work: they scaffold new layout
 - **Ticket-gated.** A ticket ID must exist before design or code. It is never inferred from Git history.
 - **Layout-agnostic.** Domain / application / delivery / infrastructure are mapped onto whatever packages the target repo already has — no forced four-root structure, no Bazel/Gazelle assumption.
 - **Contract-first.** HTTP/gRPC contracts and error envelopes are settled before handlers are written.
-- **Test-first with evidence.** Features and fixes go through a recorded RED commit before GREEN. Pure refactors go GREEN → refactor → GREEN.
+- **Test-first with evidence.** Features and fixes produce one RED test checkpoint commit, then one verified GREEN implementation commit. Pure refactors use a GREEN test checkpoint before restructuring and a verified GREEN refactor commit afterward.
 - **Version-verified libraries.** Preferred libraries (`clientmanager`, `logmanager`, `httpmanager`, `eventmanager`) are checked against the version actually on the **target** module, not copied from an example.
 - **Honest verification.** Mocks are never treated as proof of real SQL, broker, or HTTP behavior.
 
@@ -41,7 +41,7 @@ General-purpose agents tend to over-deliver on Go work: they scaffold new layout
 | Feature, bug fix, pure refactor, or checks-only run | Release, deploy, or "full handoff" |
 | Require a ticket ID before design or code | Infer a ticket from git history |
 | Map layers onto the real package layout | Force a fixed layout or Bazel/Gazelle |
-| Local RED → commit → GREEN (or GREEN → refactor → GREEN) | Use mocks as evidence for SQL, broker, or HTTP behavior |
+| Local RED → RED commit → GREEN → GREEN commit (pure-refactor exception applies) | Use mocks as evidence for SQL, broker, or HTTP behavior |
 
 Push, remote CI, MR/PR creation, deployment, documentation sync, and comprehensive diff review are **separate work**. Gocraft does not start them automatically.
 
@@ -130,8 +130,8 @@ Verification only — no implementation, no invented ticket requirement, no RED 
    | A dependency's API | [libraries.md](references/libraries.md) |
 
 3. **Checkpoint** — follow the local test protocol ([red-green.md](references/red-green.md)):
-   - **Feature / bug fix:** write the test → establish RED for the *intended* reason → commit the RED checkpoint with ticket ID and `RED` marker → implement the minimum → rerun to GREEN.
-   - **Pure refactor (behavior unchanged):** establish GREEN → fill gaps with characterization tests → refactor → GREEN again.
+   - **Feature / bug fix:** write the test → establish RED for the *intended* reason → commit RED once with the ticket ID and `RED` marker → implement the minimum → rerun to GREEN and pass required checks → commit GREEN once. RED contains tests and only declarations/inert stubs needed to execute them; implementation belongs in GREEN.
+   - **Pure refactor (behavior unchanged):** establish GREEN → fill coverage gaps and record/commit the GREEN test checkpoint under the agreed exception → refactor → GREEN again with required checks → commit the verified refactor once with `GREEN`.
 4. **Report** — summarize the outcome with evidence (see below).
 
 The agent stops speculative changes after two unexplained failures, reports the evidence, and continues only with independent work.
@@ -140,7 +140,7 @@ The agent stops speculative changes after two unexplained failures, reports the 
 
 - The implemented change and affected code/artifacts
 - Ticket ID (when required)
-- Checkpoint type and commit SHA
+- Each phase's type and commit SHA
 - The exact RED command, working directory, and observed reason (features/fixes), or the agreed exception plus pre/post GREEN evidence (pure refactors)
 - Local check results, clearly separated into **passed**, **failed**, **blocked / not run**, and **not applicable**
 - Blockers and downstream obligations still pending (docs, review)

@@ -39,17 +39,18 @@ Use clientmanager for outbound HTTP and logmanager for logging; prefer httpmanag
 
 For implementation, read [testing.md](references/testing.md), [red-green.md](references/red-green.md), and the commit section of [git-documentation.md](references/git-documentation.md).
 
-**Pure refactor with already-correct behavior:** run relevant existing unit tests before production changes and establish GREEN. Fill coverage gaps with characterization tests first, record/commit the GREEN test checkpoint as specified in [red-green.md](references/red-green.md), then refactor and establish GREEN again with applicable checks. Record why RED does not apply; this exception is already agreed and needs no repeated approval. Do not manufacture failure or use it for new behavior/bug fixes.
+**Pure refactor with already-correct behavior:** run relevant existing unit tests before production changes and establish GREEN. Fill coverage gaps with characterization tests first, record/commit the GREEN test checkpoint as specified in [red-green.md](references/red-green.md), then refactor, establish GREEN again with applicable checks and commit the refactor once with `GREEN`. Record why RED does not apply; this exception is already agreed and needs no repeated approval. Do not manufacture failure or use it for new behavior/bug fixes.
 
 **Feature or bug fix:** follow the RED path below.
 
 1. Select a public-behavior scenario from the task context. Apply TDD to every addition/change in mandatory unit-test directories, mapped to actual domain/application responsibilities and applicable target coverage.
 2. Write the test first and run the relevant local test/check pipeline. Establish RED caused by the intended missing behavior/bug, not syntax, tooling, credential or resource failure. Record the exact command, cwd and observed reason.
-3. Inspect/stage only the RED tests and minimum executable scaffolding belonging to this task; exclude the GREEN implementation and unrelated user work. Commit the RED checkpoint with the supplied ticket ID and `RED` phase marker, following the target convention or bundled fallback. Record its SHA.
+3. Apply the phase-boundary and staged-snapshot checks in [red-green.md](references/red-green.md). RED contains tests and only declarations/inert stubs required to execute them; put new behavior and artifacts unused by those tests in GREEN. Commit RED once with the supplied ticket ID and `RED` marker. Record its SHA before implementing behavior.
 4. Implement the minimum required behavior and implementation-critical artifacts, preserving meaningful assertions and task scope.
 5. Rerun the same relevant local scenario/checks to establish GREEN. After test edits, run the specific test first and the applicable unit suite when it passes; complete required lint/security and context-dependent checks using [verification.md](references/verification.md).
+6. Inspect/stage the verified implementation and commit GREEN once with the supplied ticket ID, `GREEN` marker and actual change type. Record its SHA. A failed mandatory check leaves this phase incomplete.
 
-The pipeline is local. Test checkpoints are part of core execution; push, remote CI, MR/PR creation, deployment and a subsequent implementation commit require separate requested scope. A pure-refactor GREEN test checkpoint is not a later implementation commit. Requested GREEN implementation commits use the `GREEN` marker and actual change type.
+The pipeline is local. One commit per completed phase is core execution under [red-green.md](references/red-green.md), unless the user explicitly requests a different Git scope. Push, remote CI, MR/PR creation and deployment require separate requested scope.
 
 Read entire test files before editing; use public table-driven tests, appropriate fixtures and Mockery-generated mocks. Stop speculative changes after two unexpected failures without a clear cause, report evidence, and continue only independent work.
 
@@ -57,6 +58,6 @@ Read entire test files before editing; use public table-driven tests, appropriat
 
 Inspect own changes sufficiently to verify behavior and preserve scope. Core completion requires requested implementation criteria, consistent implementation-critical artifacts and passing applicable mandatory local checks. HTTP runtime evidence is conditional on the change context; mocks do not establish real SQL/broker/HTTP behavior.
 
-Briefly report the implemented change, affected code/artifacts, ticket ID when required, checkpoint type/SHA and local check results. Include the RED reason for features/fixes, or the agreed exception and pre/post GREEN evidence for pure refactors, plus blockers and pending downstream obligations. Distinguish passed, failed, blocked/not run and not applicable.
+Briefly report the implemented change, affected code/artifacts, ticket ID when required, each phase's type/SHA and local check results. Include the RED reason and any necessary non-test scaffolding for features/fixes, or the agreed exception and pre/post GREEN evidence for pure refactors, plus blockers and pending downstream obligations. Distinguish passed, failed, blocked/not run and not applicable.
 
 Documentation synchronization, comprehensive diff review and full handoff remain downstream subskill candidates; do not create or invoke them automatically. Required pending documentation/review still affects overall task/MR readiness even when the core phase passes. This skill neither provisions resources nor expands unrelated legacy work.

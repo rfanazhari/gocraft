@@ -6,7 +6,7 @@
 
 Scenarios come from the task, FSD, technical design, acceptance criteria, business rules and relevant contracts. Establish product decisions before writing tests that encode them.
 
-Follow [red-green.md](red-green.md): the ticket gate applies to design/implementation; features and fixes use observed local RED → RED checkpoint commit → implementation → local GREEN. The agreed pure-refactor exception uses a verified GREEN test checkpoint before restructuring and GREEN afterward. Remote CI is not the checkpoint runner.
+Follow [red-green.md](red-green.md): the ticket gate applies to design/implementation; features and fixes use observed local RED → one RED checkpoint commit → implementation → local GREEN and required checks → one GREEN implementation commit. The agreed pure-refactor exception uses a verified GREEN test checkpoint before restructuring and a verified GREEN refactor commit afterward. Remote CI is not the checkpoint runner.
 
 Unit tests for delivery/infrastructure and other layers are optional and preferably not added unless requested. If only an adapter/transport changes, run relevant inner-layer regression tests; do not invent domain changes merely to add tests.
 
@@ -16,9 +16,9 @@ Integration checks are appropriate only where mocks cannot establish the behavio
 
 | Task type | Before implementation | Cycle and evidence |
 | --- | --- | --- |
-| Feature | Select a small public-behavior scenario | Write/run test → valid observed RED pipeline → checkpoint commit → minimum implementation → GREEN pipeline → refactor. |
-| Bug fix | Establish expected/actual and a regression trigger | Write/run regression test before the fix → valid observed RED pipeline → checkpoint commit → fix → GREEN pipeline and relevant regression suite. |
-| Pure refactor | Run relevant existing unit tests and establish GREEN; add characterization tests first if coverage is insufficient | For already-correct unchanged behavior, record/commit the verified GREEN test checkpoint under the agreed protocol → refactor → GREEN again. Record why RED does not apply; never fabricate failure. |
+| Feature | Select a small public-behavior scenario | Write/run test → valid observed RED pipeline → checkpoint commit → minimum implementation → GREEN pipeline → any in-scope refactor and recheck → one GREEN commit. |
+| Bug fix | Establish expected/actual and a regression trigger | Write/run regression test before the fix → valid observed RED pipeline → checkpoint commit → fix → GREEN pipeline and relevant regression suite → one GREEN commit. |
+| Pure refactor | Run relevant existing unit tests and establish GREEN; add characterization tests first if coverage is insufficient | For already-correct unchanged behavior, record/commit the verified GREEN test checkpoint under the agreed protocol → refactor → GREEN again and one GREEN refactor commit. Record why RED does not apply; never fabricate failure. |
 
 Existing passing unit tests can protect a pure refactor when their coverage is sufficient. Otherwise add characterization tests before production changes. Apply the agreed GREEN-checkpoint exception without asking for the same decision again; preserve behavior and record before/after evidence. Features and bug fixes still require a valid RED scenario.
 
