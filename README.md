@@ -1,42 +1,39 @@
 # Gocraft
 
-A [Cursor Agent Skill](https://cursor.com/docs/context/skills) for implementing and verifying changes in **existing Go projects**. Gocraft encodes team workflow, coding standards, TDD checkpoints, and conditional reference material so the agent can execute feature work, bug fixes, refactors, or verification-only tasks against real module layouts—not a single fixed repository shape.
+Cursor skill for **shipping a scoped change in an existing Go module** — feature, fix, refactor, or verification — without inventing a greenfield service, a release train, or a full review handoff.
 
-New-service scaffolding, full release pipelines, and comprehensive review/handoff are intentionally **out of scope**; the skill focuses on scoped implementation plus local test and check evidence.
+It encodes the niche this team actually works in: ticket-gated implementation, inward-dependency layers mapped onto *whatever layout already exists*, contract-first HTTP/gRPC, TDD checkpoints, and preferred libraries (`clientmanager`, `logmanager`, `httpmanager`, `eventmanager`) verified against the **target** module version.
 
-## When to use it
+```text
+brief + ticket + existing Go tree  →  /gocraft  →  RED/GREEN evidence, not a new repo
+```
 
-Invoke **gocraft** when you have (or will supply):
+## Niche
 
-- A task brief, FSD, technical design, or equivalent description of the change
-- A target Go workspace (single module, service, or workspace) to modify
-- For implementation: an explicit **ticket ID** (required before design or code changes)
+| In | Out |
+| --- | --- |
+| Change an existing service, module, or workspace | Scaffold a new service |
+| Feature, bug fix, pure refactor, or checks-only | Release, deploy, or “full handoff” |
+| Ticket ID before design or code | Inferring a ticket from git history |
+| Map domain / application / delivery / infra onto real packages | Force a four-root layout or Bazel/Gazelle |
+| Local RED → commit → GREEN (or GREEN → refactor → GREEN) | Treat mocks as SQL, broker, or HTTP proof |
 
-Use **verification-only** mode when you only need relevant local tests, lint, or security checks run against the current tree—no invented implementation work.
+Invoke it when you have a brief (FSD, design, ticket notes) and a Go tree to touch. Use **verification-only** when you only want relevant tests, lint, or security checks — no invented implementation.
 
-## Installation
+## Install
 
-Requires [Node.js](https://nodejs.org/) (Skills CLI recommends 22.20+). Install with the [Skills CLI](https://github.com/vercel-labs/skills) from the **Go project** where you want the agent to use gocraft (not necessarily this repo).
-
-**Project skill** (committed with the team, default):
+Needs [Node.js](https://nodejs.org/) (Skills CLI: 22.20+). Run from the **Go project** where the agent should load gocraft, not necessarily this repo.
 
 ```bash
+# committed with the team (default)
 npx skills add rfanazhari/gocraft --skill gocraft -a cursor
-```
 
-**Global skill** (all Cursor projects on this machine):
-
-```bash
+# every Cursor project on this machine
 npx skills add rfanazhari/gocraft --skill gocraft -a cursor -g
-```
 
-From a local checkout of this repository (while developing the skill):
-
-```bash
+# local checkout while editing the skill
 npx skills add /path/to/gocraft --skill gocraft -a cursor
 ```
-
-Useful follow-ups:
 
 ```bash
 npx skills list
@@ -44,14 +41,14 @@ npx skills update
 npx skills remove gocraft
 ```
 
-The CLI installs into `.agents/skills/` for the current project (or `~/.cursor/skills/` with `-g`). Cursor also loads `.cursor/skills/` and `~/.cursor/skills/` if you install manually.
+Installs to `.agents/skills/` (or `~/.cursor/skills/` with `-g`). Cursor also loads `.cursor/skills/` and `~/.cursor/skills/` for a manual copy.
 
-After installation, start a new Agent chat and invoke **gocraft** with `/gocraft` or describe a Go implementation/verification task—the agent matches the skill from its description.
+Then start a new Agent chat and use `/gocraft`, or describe a Go implementation/verification task.
 
 <details>
-<summary>Manual install (without npx)</summary>
+<summary>Manual install (no npx)</summary>
 
-Clone or copy this package so the folder name is `gocraft` and it contains `SKILL.md` plus `references/`:
+Folder name must be `gocraft` and contain `SKILL.md` plus `references/`:
 
 ```bash
 git clone https://github.com/rfanazhari/gocraft.git ~/.cursor/skills/gocraft
@@ -60,23 +57,25 @@ git clone https://github.com/rfanazhari/gocraft.git ~/.cursor/skills/gocraft
 
 </details>
 
-## How it works
+## How it runs
 
-1. **Route scope** — [references/scope-routing.md](references/scope-routing.md) decides whether to implement, recover missing context, or verify only.
-2. **Apply gates** — Ticket ID, [Go standards](references/go-standards.md), and topic-specific references (API errors, persistence, integrations, libraries) load only when the change triggers them.
-3. **Test checkpoints** — Features and fixes follow **RED → RED commit → implement → GREEN** ([references/red-green.md](references/red-green.md)). Pure refactors with unchanged behavior use the agreed **GREEN checkpoint → refactor → GREEN** path.
-4. **Report** — Brief result: what changed, checkpoint SHA, local check outcomes, blockers, and any downstream documentation or review still pending.
+1. **Route** — [scope-routing.md](references/scope-routing.md): implement, recover a real gap, or verify only.
+2. **Gate** — ticket ID; [go-standards.md](references/go-standards.md); then only the topics the change hits (API/errors, persistence, integrations, libraries).
+3. **Checkpoint** — feature/fix: **RED → RED commit → GREEN** ([red-green.md](references/red-green.md)). Pure refactor with unchanged behavior: **GREEN → refactor → GREEN**.
+4. **Report** — what changed, checkpoint SHA, local check outcomes, blockers, leftover docs/review.
 
-The agent entry point is **[SKILL.md](SKILL.md)**. Human-oriented navigation for bundled references is **[references/README.md](references/README.md)**.
+Agent entry: **[SKILL.md](SKILL.md)**. Human index of references: **[references/README.md](references/README.md)**.
 
-## Repository layout
+Rules live in this package. Paths, Make targets, CI, contracts, and dependency versions come from the **target** repo.
 
-```
+## Layout
+
+```text
 gocraft/
-├── SKILL.md                 # Agent entry point (required for Cursor)
-├── README.md                # This file
-└── references/              # Conditional standards and workflow (Markdown)
-    ├── README.md            # Reference index and authority
+├── SKILL.md
+├── README.md
+└── references/
+    ├── README.md              # index + authority
     ├── scope-routing.md
     ├── workflow.md
     ├── requirements.md
@@ -90,29 +89,25 @@ gocraft/
     ├── red-green.md
     ├── verification.md
     ├── git-documentation.md
-    ├── sources.md           # Provenance and settled decisions (maintainers)
-    └── validation.md        # Package isolation checks (maintainers)
+    ├── sources.md             # maintainers: provenance
+    └── validation.md          # maintainers: isolation checks
 ```
 
-All operational rules live inside this package. Execution still requires inspecting the **target** repository (layout, Makefile or scripts, CI, contracts, dependency versions).
+## Defaults that define the niche
 
-## Design principles
-
-| Topic | Behavior |
-| --- | --- |
-| Target adaptation | Discover actual paths, tools, and conventions; do not assume Bazel, a specific Git host, or one monorepo layout. |
-| Contract-first | HTTP/gRPC and error envelope changes settle the contract before handlers. |
-| Dependencies | Prefer **clientmanager** (HTTP), **logmanager** (logging), and **httpmanager** / **eventmanager** when suitable; verify APIs at the effective version on the target. |
-| Core vs downstream | Implementation-critical artifacts (migrations, error catalogs, mocks) belong in core work; broad doc sync and full handoff are separate, explicit scope. |
-| Evidence | Local pipelines establish RED/GREEN; mocks do not prove real SQL, brokers, or HTTP unless criteria say otherwise. |
+- **Adapt the target** — discover real packages and tools; do not assume one monorepo, Git host, or build system.
+- **Contract before handler** — HTTP/gRPC and error envelopes settle first.
+- **Preferred stack** — `clientmanager` (HTTP), `logmanager` (logs), `httpmanager` / `eventmanager` when they fit; check the version actually on the target.
+- **Core vs later** — migrations, error catalogs, and mocks are in-scope when the change needs them; wide doc sync is separate work.
+- **Evidence is local** — RED/GREEN from the relevant pipeline, not from a mock standing in for a real dependency unless the criteria say so.
 
 ## Maintainers
 
-- **Decision history and source mapping:** [references/sources.md](references/sources.md)
-- **Package validation checklist:** [references/validation.md](references/validation.md)
+- Decision history: [references/sources.md](references/sources.md)
+- Package checks: [references/validation.md](references/validation.md)
 
-Edit operational rules in the owning reference file, then update the index in [references/README.md](references/README.md) if navigation changes.
+Edit the owning reference, then the index in [references/README.md](references/README.md) if navigation changes.
 
 ## License
 
-No license file is included yet. Add one if you distribute this skill outside your organization.
+No license file yet. Add one before distributing outside the org.
