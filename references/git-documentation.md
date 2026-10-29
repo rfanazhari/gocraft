@@ -42,13 +42,13 @@ Follow the resolved target convention. When none is specified, this complete bas
 - Test checkpoints use uppercase `RED` for features/fixes or `GREEN` for the agreed pure-refactor exception. Implementation commits use `GREEN`; the following imperative description is lowercase, without a trailing period.
 - Missing ticket information blocks entering change design or task implementation, including its RED test edits and checkpoint commit. Ask for the identifier and reuse it; context/setup or verification-only work does not trigger this gate.
 
-Default examples; `alice`, `TASK-123` and `orders` are illustrative values, not inputs to reuse:
+Default examples; `alice` and `TASK-123` are illustrative values, not inputs to reuse:
 
 ```text
-test: [alice][TASK-123][orders] RED cover order total calculation
-feat: [alice][TASK-123][orders] GREEN implement order total calculation
-test: [alice][TASK-123] RED cover order total calculation
-test: [alice][TASK-123][orders] GREEN cover existing order behavior before refactor
+test: [TASK-123][alice] RED cover order total calculation
+feat: [TASK-123][alice] GREEN implement order total calculation
+test: [TASK-123][alice] RED cover order total calculation
+test: [TASK-123][alice] GREEN cover existing order behavior before refactor
 ```
 
 Use `test` for a test checkpoint. A GREEN implementation commit uses `feat`, `fix` or `refactor` according to the actual change. Omit the service bracket when none applies. Follow a materially different target commit convention after resolving its requirements while retaining phase/ticket traceability.
