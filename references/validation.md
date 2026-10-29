@@ -2,6 +2,18 @@
 
 This document records package checks and their limits. The historical reference-package snapshot predates `SKILL.md`; the later per-phase correction has separate evidence below.
 
+## Executable commit-message gate — 2026-10-29
+
+The reported session read the current ticket/author template and obtained the Git author, then invoked `git commit` with a scoped subject missing the author, citing the task-plan format. This establishes an instruction-adherence failure despite up-to-date installed files; it does not establish the model's internal reasoning.
+
+The base checkpoint path now uses [scripts/phase_commit.py](../scripts/phase_commit.py) with `--commit`. The command validates against the supplied ticket/type/phase and target Git author before invoking Git, then verifies the actual subject after hooks. The target-convention exception requires a documented rule and validator; recorded checkpoint subjects do not qualify.
+
+`python3 -m unittest discover -s scripts -p 'test_*.py' -v` passed six tests in isolated temporary Git repositories. Checks covered the exact reported bad subject, missing/wrong author, wrong ticket/order/type/phase, extra service brackets, unresolved author, malformed descriptions, missing Git author, read-only validation, valid checkpoint creation with SHA/subject, allowed GREEN types, RED type enforcement and hook mutation without history rewriting. Invalid pre-commit inputs preserved staging and created no commits.
+
+Skill metadata validation passed using Python 3.11 with PyYAML. Local links/fragments, containment, navigation, fences, whitespace and topic-length checks passed for 19 operational/overview Markdown files. An isolated package including `scripts/` passed the same package checks and Git tests with matching file hashes. Read-only checks against the reported target repository rejected its exact malformed subject and accepted the corrected subject with its actual Git author. No target commits or configuration were changed.
+
+These checks exercise the real Git command path. They do not establish that a future agent invokes it: raw Git remains available, and no hooks or target configuration are installed automatically. Staged-snapshot/test checks and ticket provenance remain separate responsibilities. Fresh-agent adherence remains untested.
+
 ## Design-assessment update checks — 2026-10-29
 
 The approved workflow adds [design-assessment.md](design-assessment.md) and distinguishes assessment-selected new internal contracts from existing-contract restructuring in [red-green.md](red-green.md#assessment-selected-work). Workflow, completion, navigation, commit and encapsulation guidance were reviewed together; historical hypothesis/provenance notes identify the superseding decisions.

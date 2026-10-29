@@ -17,7 +17,7 @@ The same file may appear in both commits: RED can introduce a constructor stub, 
 
 Before each commit, inspect `git status --short`, `git diff --cached --stat` and the full `git diff --cached`. Stage explicit paths/hunks and preserve unrelated staged/unstaged user work; use an isolated index/worktree when unrelated changes are already staged. Test the exact staged snapshot in an isolated temporary workspace if it differs from the tested working tree. A RED log from an earlier state does not validate a staged snapshot containing later implementation. Confirm the committed snapshot matches the tested snapshot; if a hook changes it, rerun the phase checks before proceeding. Keep checkpoint history intact; report an invalid existing checkpoint rather than rewriting user commits.
 
-Every phase commit also requires the [phase commit message gate](git-documentation.md#phase-commit-message-gate). Resolve the full convention before the first checkpoint, validate it before each commit, and verify the actual subject afterward. References below to a ticket or phase marker are fields within that full convention, not a shorter alternative format.
+Every phase commit also requires the [phase commit message gate](git-documentation.md#phase-commit-message-gate). Resolve the full convention before the first checkpoint; use its bundled checkpoint command for the base convention or its explicit target-convention exception. A validator failure stops the checkpoint. References below to a ticket or phase marker are fields within that full convention, not a shorter alternative format.
 
 ## User-supplied ticket gate
 

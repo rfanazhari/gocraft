@@ -51,6 +51,8 @@ Push, remote CI, MR/PR creation, deployment, documentation sync, and comprehensi
 
 Requires [Node.js](https://nodejs.org/) (Skills CLI needs 22.20+). Run the commands from the **Go project** where you want the agent to load gocraft, not necessarily from this repo. Replace `<agent>` with your agent's name (for example `cursor` or `claude-code`); `npx skills add --help` lists the supported ones.
 
+Checkpoint execution also requires Python 3 and Git for the bundled [commit validator](scripts/phase_commit.py). Install the complete skill directory, including `scripts/`.
+
 ```bash
 # Project-level, committed with the team (default)
 npx skills add rfanazhari/gocraft --skill gocraft -a <agent>
@@ -75,7 +77,7 @@ Where the skill lands depends on the agent (for example `.agents/skills/` at pro
 <details>
 <summary>Manual install (no npx)</summary>
 
-The folder must be named `gocraft` and contain `SKILL.md` plus `references/`. Clone it into your agent's skills directory:
+The folder must be named `gocraft` and contain `SKILL.md`, `references/` and `scripts/`. Clone it into your agent's skills directory:
 
 ```bash
 # Cursor
@@ -163,6 +165,9 @@ The agent stops speculative changes after two unexplained failures, reports the 
 gocraft/
 ├── SKILL.md                    # agent entry point
 ├── README.md                   # you are here
+├── scripts/
+│   ├── phase_commit.py         # validate, commit and verify phase subjects
+│   └── test_phase_commit.py    # isolated Git regression tests
 └── references/
     ├── README.md               # index + authority rules
     ├── scope-routing.md
