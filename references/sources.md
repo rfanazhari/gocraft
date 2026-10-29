@@ -58,6 +58,10 @@ Reinspect the effective dependency source for the actual target before use. Exte
 
 ## Maintenance boundary
 
+### Approved design-assessment update — 2026-10-29
+
+The user approved mandatory design confirmation/assessment and justified scoped refactoring, including RED/GREEN for selected new internal contracts while preserving product behavior. Existing-contract restructuring retains the agreed GREEN-before/after exception. Initial and assessment-selected local checkpoints are core; one coherent phase/unit per commit replaces a fixed two-commit total for tasks requiring further work. [design-assessment.md](design-assessment.md) owns assessment/authority; [red-green.md](red-green.md) owns test-path selection and checkpoints. Earlier fixed-count statements above describe prior decisions. New tooling, mandatory subagents and per-behavior assessment remain outside the default requirements; real-task pilot evidence is pending.
+
 Edit operational rules in their owning reference; update affected stage criteria and navigation. Keep this audit optional. Do not move required behavior into a source-history pointer or replace it with an instruction to read the original repository.
 
 The `gocraft` entry point and local test-checkpoint protocol, including the approved pure-refactor exception, are authored. Preserve these decisions in later work. The subsequent local-trial feedback clarified per-phase commit contents and included the GREEN implementation commit in core. Subskill design and installation remain separate work.

@@ -13,12 +13,13 @@ The skill entry point is [SKILL.md](../SKILL.md). It defines core execution and 
 | [requirements.md](requirements.md) | Reading supplied context or recovering a specific gap | Input sufficiency, targeted discovery, acceptance criteria, ambiguity. |
 | [go-standards.md](go-standards.md) | Before designing or editing Go | Language, constructors, file organization, configuration, security, performance. |
 | [architecture.md](architecture.md) | Mapping changes to packages | Layer boundaries, existing layout, ports, composition and lifecycle. |
+| [design-assessment.md](design-assessment.md) | Every implementation task/slice: before code, after GREEN and before completion | Invariant mapping, design authority, DDD/SRP/DRY/KISS assessment, scoped refactoring and justified dispositions. |
 | [api-errors.md](api-errors.md) | HTTP/gRPC behavior, handlers, errors, localization change | Contract first, compatibility, envelope, safe errors and translations. |
 | [persistence.md](persistence.md) | Queries, repositories, transactions, schema or stored data change | SQL, ORM, indexes, migrations, data safety. |
 | [integrations-events.md](integrations-events.md) | Upstream calls or events change | Contracts, failure semantics, side effects, concurrency and delivery. |
 | [libraries.md](libraries.md) | Selecting or using a dependency API | Required/preferred libraries, effective versions, compatibility evidence. |
 | [testing.md](testing.md) | Before adding/editing tests or implementing covered code | TDD, refactors, public tests, fixtures, generated mocks, execution order. |
-| [red-green.md](red-green.md) | Before change design/implementation and its test checkpoint | Ticket gate; one commit per completed phase; RED scaffolding boundaries and staged-snapshot evidence; agreed pure-refactor exception. |
+| [red-green.md](red-green.md) | Before change design/implementation and initial or assessment-selected checkpoints | Ticket gate, test-path selection, coherent unit granularity, RED scaffolding and staged-snapshot evidence, agreed GREEN-before/after exception. |
 | [verification.md](verification.md) | Planning evidence or accepting results | Test/lint/security gates, runtime evidence, failures, review and handoff. |
 | [git-documentation.md](git-documentation.md) | Before every phase commit; conditional workspace recovery or downstream documentation/Git work | Mandatory message gate, convention discovery and actual-subject verification; conditional workspace/Git and documentation conventions. |
 | [sources.md](sources.md) | Auditing or maintaining this package only | Provenance and settled source conflicts. |
@@ -43,4 +44,4 @@ Established target locations and compatible conventions may be reused without mi
 
 ## Completion principle
 
-Core completion requires the requested implementation, consistent implementation-critical artifacts and passing applicable mandatory checks. Optional recovery is complete when its specific context gap is resolved. A blocked mandatory check means unfinished core work. Track outstanding required documentation/review/handoff separately; core success does not establish overall task/MR readiness. Optional integration tests do not become universal merge gates; explicit runtime acceptance criteria still require suitable evidence.
+Core implementation completion requires the requested implementation, completed design assessment, consistent implementation-critical artifacts and passing applicable mandatory checks on the final state. Verification-only work reports its requested checks without adding implementation assessment/checkpoints. Optional recovery is complete when its specific context gap is resolved. A blocked mandatory check means unfinished core work. Track outstanding required documentation/review/handoff separately; core success does not establish overall task/MR readiness. Optional integration tests do not become universal merge gates; explicit runtime acceptance criteria still require suitable evidence.

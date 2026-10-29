@@ -1,6 +1,6 @@
 # Execute a task in an existing Go project
 
-Use the labels and authority in the [index](README.md) and start with [scope-routing.md](scope-routing.md). The core path is implement → test/verify → brief execution result. With sufficient supplied context, proceed directly to sections 5 and 7; do not repeat sections 1–4. Read the references relevant to the actual change.
+Use the labels and authority in the [index](README.md) and start with [scope-routing.md](scope-routing.md). The core path is confirm design → implement/test → assess and resolve findings → verify → brief result. With sufficient supplied context, proceed directly to sections 5 and 7; do not repeat sections 1–4. Read the references relevant to the actual change.
 
 Sections 1–3 are optional recovery for missing context/workspace/design, and section 4 resolves missing dependent decisions. Section 6 describes downstream subskill candidates rather than an obligatory core phase. Section 8 defines the minimal core output and its downstream boundary.
 
@@ -63,18 +63,20 @@ Complete when dependent implementation needs no hidden behavior, compatibility o
 
 Dependency: sufficient supplied context or resolved gaps; an appropriate workspace and applicable contracts are available. Do not require the optional recovery stages when these conditions are already met.
 
-Entering implementation requires the supplied ticket ID even with complete context. Use [red-green.md](red-green.md): features/fixes establish local RED → one RED test commit → implementation → GREEN and required checks → one GREEN implementation commit; already-correct pure refactors use the agreed verified GREEN test checkpoint → refactor → verified GREEN refactor commit. Remote CI is not required.
+Entering implementation requires the supplied ticket ID even with complete context. Use [red-green.md](red-green.md) for initial and assessment-selected test paths and local phase commits. Remote CI is not required.
 
 - Read related files and apply the Go, architecture, API/error and active-component standards.
+- Before code, briefly confirm the design mapping under [design-assessment.md](design-assessment.md), reusing supplied decisions and resolving only material conflicts/gaps.
 - Apply [testing.md](testing.md): TDD is required for additions/changes in mandatory unit-test directories for features, fixes and refactors.
-- For a pure refactor, run existing unit tests first, add characterization coverage if insufficient, establish/record the verified GREEN test checkpoint, then refactor, establish GREEN again and commit the verified refactor once. Apply the agreed exception directly; do not fabricate RED or request the same approval again. Separate new behavior/bugs from the pure-refactor path.
+- For a refactor task, establish an existing GREEN baseline, assess the selected changes and classify their test paths before production edits. New internal contracts require RED/GREEN; existing-contract restructuring uses the agreed GREEN-before/after exception with characterization coverage when needed. Preserve product behavior and never fabricate RED.
 - Implement the minimum behavior, real wiring, context propagation and safe error handling. Regenerate mocks when a tested interface changes.
 - Include implementation-critical migration/schema, error/translation, dependency, generated-code and configuration artifacts required by the requested change; broader documentation synchronization belongs to the downstream boundary below.
 - Keep nearby legacy edits limited to what the task needs. After test edits, run the specific test, then the unit suite when green.
+- After the verified GREEN checkpoint, complete [design-assessment.md](design-assessment.md) once per task/slice. Perform justified selected work using its applicable checkpoints, then reassess the final diff. Record retained/deferred findings with reasons; no-change outcomes require no extra commit.
 
-Output: scoped code/tests and technical artifacts, ticket ID, each phase's type/SHA and local results. Features/fixes include RED evidence; pure refactors include the exception reason and pre/post GREEN evidence.
+Output: scoped code/tests and technical artifacts, ticket ID, all applicable checkpoint subjects/SHAs and local results, design mapping and assessment dispositions. Include RED reasons or the GREEN-before/after exception evidence for each selected path.
 
-Complete when the slice passes its criteria and dependent decisions are resolved. Expected RED is intermediate evidence; environment failure is not behavioral RED.
+Complete when the slice passes its criteria, assessment is complete, selected changes are verified and dependent decisions are resolved. Expected RED is intermediate evidence; environment failure is not behavioral RED.
 
 ## 6. Downstream candidates: documentation, comprehensive review and handoff
 
@@ -96,13 +98,13 @@ Dependency: implemented slices and consistent implementation-critical artifacts;
 For a verification-only request, execute the requested checks directly without adding a ticket requirement or manufacturing a RED commit; the ticket gate applies when design/implementation is entered.
 
 - Run [verification.md](verification.md); record working directory, exact command, result and limits.
-- Match requested implementation criteria to evidence. Inspect own changes sufficiently to verify behavior and preserve scope, including new/renamed/removed/generated files. A separate comprehensive diff review is downstream work.
+- Match requested implementation criteria and completed design assessment to evidence. Inspect own changes sufficiently to verify behavior and preserve scope, including new/renamed/removed/generated files. A separate comprehensive diff review is downstream work.
 - Fix in-scope findings and rerun affected checks. Record independent findings without silently expanding the task.
 - **Conditional:** inspect actual CI results when MR/PR/pipeline work is requested. Local checks do not establish that CI passed.
 
 Output: implementation criterion/check results, own-change verification and explicit limitations/pending downstream obligations.
 
-Core execution is complete when requested implementation criteria and applicable mandatory checks pass and conditional checks have evidence or valid not-applicable reasons. Existing failures and blocked checks remain visible; pending downstream obligations prevent an unqualified claim of overall task/MR completion.
+Core implementation is complete when requested implementation criteria and applicable mandatory checks pass on the final state, design assessment is complete, and conditional checks have evidence or valid not-applicable reasons. Verification-only work reports requested checks and actual outcomes without adding assessment/checkpoints. Existing failures and blocked checks remain visible; pending downstream obligations prevent an unqualified claim of overall task/MR completion.
 
 ## 8. Core result and downstream boundary
 

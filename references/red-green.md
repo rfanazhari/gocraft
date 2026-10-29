@@ -1,10 +1,10 @@
 # Local test checkpoints and GREEN continuation
 
-This reference owns the user's checkpoint protocol. Features and bug fixes require valid local RED → one RED commit → implementation → local GREEN and required checks → one GREEN commit. Pure refactors with already-correct behavior use the agreed GREEN test checkpoint → refactor → verified GREEN implementation commit exception below. Pipeline means local tests/checks; remote CI is not the checkpoint runner.
+This reference owns test-path selection, checkpoints and commit granularity. Features and bug fixes start with local RED → RED commit → implementation → verified GREEN commit. Every implementation task/slice also requires [design assessment](design-assessment.md); selected work may add RED/GREEN or GREEN-before/after checkpoints below. Pipeline means local tests/checks; remote CI is not the checkpoint runner.
 
 ## Phase boundaries and commit contents
 
-Use the requested task or explicitly agreed implementation slice as the phase unit. Group its scenarios into one RED checkpoint and one GREEN implementation commit; test cases and test reruns do not each create a commit. Both local commits belong to core execution unless the user explicitly requests a different Git scope. A blocked phase remains incomplete; do not manufacture a commit to satisfy the count.
+Use the requested task or explicitly agreed implementation slice as the initial phase unit. Group its scenarios into one RED checkpoint and one GREEN implementation commit. After assessment, group selected changes into coherent verified units by contract and test path; each unit has the applicable checkpoints below. Test cases, individual edits and reruns do not each create commits. These local phase commits belong to core execution unless the user explicitly requests a different Git scope. A blocked phase remains incomplete; do not manufacture a commit to satisfy a count.
 
 | Phase | Commit contents | Exit condition |
 | --- | --- | --- |
@@ -35,10 +35,28 @@ Context gathering/setup alone and verification-only execution (scope point 5) do
 4. Implement the required behavior after the RED checkpoint. Preserve meaningful assertions; do not weaken or disable the test merely to pass.
 5. Run the same relevant pipeline/scenario to demonstrate GREEN, plus applicable mandatory checks. Fix in-scope failures and report actual outcomes and remaining limitations.
 6. Apply the staging and message checks above and commit the verified implementation once using the same resolved convention. Verify and record its actual subject, SHA and the RED → GREEN relationship.
+7. Assess the GREEN implementation using [design-assessment.md](design-assessment.md). Classify selected changes below before further production edits; verify their final state and reassess the diff before declaring core completion.
 
 An unexpected toolchain, syntax, credential or resource failure is not valid behavioral RED. A pipeline that was not executed is not RED evidence. Expected RED is an intermediate checkpoint, not permission to report the implementation complete with failing checks.
 
-Both phase commits belong to core implementation. Push, remote CI, MR/PR creation and deployment still require separately requested scope. A pure-refactor GREEN test checkpoint is distinct from its GREEN implementation commit.
+Initial and assessment-selected phase commits belong to core implementation. Push, remote CI, MR/PR creation and deployment still require separately requested scope. A pure-refactor GREEN test checkpoint is distinct from its GREEN implementation commit.
+
+## Assessment-selected work
+
+Establish a passing existing-behavior baseline and classify each selected unit before production edits. The refactor phase describes the design objective; its commits still use the `RED`/`GREEN` markers, never a new `REFACTOR` marker.
+
+| Selected work | Test and checkpoint path |
+| --- | --- |
+| New internal contract, such as a validated value-object constructor, preserving existing product behavior | Write contract tests with independent expectations → executable intended RED → `test` RED commit → implement contract and integrate → regression tests and required checks → `refactor` GREEN commit. |
+| Restructuring behind an existing contract | Use the agreed GREEN-checkpoint exception below, including characterization coverage before restructuring when needed. |
+| New product behavior or a bug fix | Resolve behavior and scope first, then use the feature/fix RED path above with the corresponding GREEN commit type. |
+| Design retained | Record the assessment rationale; no additional commit is required. |
+
+For a new internal contract, name its callers, intended behavior and benefit before writing tests. At RED, existing-behavior regressions must remain GREEN while assertions for the missing contract fail. Add only compile-required declarations/inert stubs; a missing symbol, syntax error or tooling failure alone is not valid RED. Never break working behavior to manufacture failure.
+
+Keep contract implementation and integration in the same verified GREEN unit when practical. If a separately verified integration step is necessary, use the existing-contract GREEN-before/after path for that step. New exported types/methods still require a compatibility review; “internal” does not exempt changed callers or data contracts.
+
+An existing verified GREEN implementation commit can serve as the next restructuring baseline when its snapshot matches. Commit new characterization coverage before production edits when needed; otherwise reuse the baseline SHA. Record each additional unit's relationship to the original task and its final regression evidence.
 
 ## Local pipeline meaning
 
@@ -50,7 +68,7 @@ Record these as local results. Do not require commit/push or remote CI to obtain
 
 ## Agreed pure-refactor exception
 
-Apply this exception only when the task preserves public behavior, that behavior is already correct, and there is no meaningful missing-feature/bug scenario requiring RED. Do not label a feature or bug fix as a pure refactor to bypass RED.
+Apply this exception to restructuring behind existing contracts when public behavior is already correct and remains unchanged. It applies to standalone pure refactors and assessment-selected restructuring. A new internal contract follows its RED/GREEN path above; new product behavior/bug fixes follow the feature/fix path. Do not label them existing-contract restructuring to bypass RED.
 
 1. Run the relevant existing unit tests before changing production code and establish GREEN. Unexpected existing failures need diagnosis; they do not establish this exception's precondition.
 2. If coverage is insufficient, add characterization tests first to lock the existing intended behavior. Run specific edited tests, then the applicable unit suite, and establish GREEN before restructuring.
@@ -59,10 +77,10 @@ Apply this exception only when the task preserves public behavior, that behavior
 
 If existing coverage is already sufficient and there are no task test changes to commit, identify the existing commit matching the tested state as the verified GREEN checkpoint and record its SHA; do not manufacture an empty commit or alter tests solely to create a diff. Preserve unrelated user changes and do not claim an existing commit contains an uncommitted tested state.
 
-This is an agreed exception, not a decision to request again for each qualifying refactor. Never manufacture RED by breaking correct behavior or writing a deliberately false assertion. Bugs/new behavior discovered during a refactor need their own appropriately scoped RED path.
+This is an agreed exception, not a decision to request again for each qualifying refactor. Never manufacture RED by breaking correct behavior or writing a deliberately false assertion. Reassess the final diff under [design-assessment.md](design-assessment.md); another full cycle is needed only if a remaining justified finding requires work, not to produce a no-op commit.
 
 A verification-only request reports existing check outcomes; it does not invent an implementation change or commit solely to create RED. Missing ticket information blocks only the design/implementation work that triggers the gate.
 
 ## Core evidence
 
-Include the supplied ticket ID when required, each phase's SHA/actual commit subject and local command/results. For features/fixes include the observed RED reason, any non-test RED scaffolding and why it was required, and subsequent GREEN. For pure refactors include why the exception applies, pre-refactor GREEN, any characterization coverage and post-refactor GREEN. If required lint/security or other mandatory checks fail, distinguish passing scenario tests from incomplete GREEN verification and report the blocker without a GREEN completion claim. Source review, an intended command or a commit message alone is not proof of a pipeline result.
+Include the supplied ticket ID when required, each phase's SHA/actual commit subject and local command/results. For each RED/GREEN unit include the observed RED reason, necessary non-test scaffolding and subsequent GREEN. For existing-contract restructuring include why the exception applies, pre-refactor GREEN, characterization coverage and post-refactor GREEN. Include assessment findings/dispositions, selected paths and final behavior-preservation limits. Mandatory check failures leave verification incomplete even when scenario tests pass. Source review, an intended command or a commit message alone is not proof of a pipeline result.

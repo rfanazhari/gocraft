@@ -2,9 +2,22 @@
 
 ## Status and purpose
 
-This document captures the discussion about improving design quality in gocraft's implementation workflow. It is context for a future refactor discussion, not an approved implementation specification.
+This document preserves the original discussion about improving design quality in gocraft's implementation workflow. The approved execution decisions below supersede unresolved proposals where stated; the remaining discussion is historical context.
 
-The design principles below were agreed during the discussion. Workflow mechanics, tooling, commit granularity, and evaluation criteria remain hypotheses unless explicitly stated otherwise. No workflow changes have been implemented as part of this handoff.
+The user approved implementation of the reviewed plan on 2026-10-29, including meaningful RED/GREEN for new internal contracts selected during refactoring. The operational rules now live in [design-assessment.md](../../references/design-assessment.md) and [red-green.md](../../references/red-green.md); this note is not a second source of execution instructions.
+
+### Approved execution decisions
+
+- Briefly confirm the design before code, reusing supplied context. Assessment is required once per task/slice after GREEN, with a final-diff reassessment after selected changes.
+- New internal contracts use executable intended RED → GREEN while existing product behavior remains protected. Existing-contract restructuring uses the agreed GREEN-before/after exception, with characterization coverage where necessary. New product behavior/bugs retain the appropriately scoped feature/fix RED path.
+- Initial and assessment-selected local phase commits belong to core execution, grouped by coherent contract/test-path units. Retained designs need a rationale, not an empty commit.
+- Permit justified in-scope structural refinements while preserving governing constraints, contracts and user work. Include direct caller/new-file impacts; resolve material behavior, aggregate-boundary, transaction or broader-scope decisions before dependent work.
+- Align workflow, standards, verification, commit guidance and completion evidence. Distinguish encapsulated domain objects from public-field data carriers.
+- Keep new Sonar/architecture frameworks, mandatory subagents and per-behavior assessment outside the default requirements.
+
+### Validation and pilot boundary
+
+Package validation and scenario walkthroughs are recorded in [validation.md](../../references/validation.md). A 2–3 real-task pilot remains the next usage evaluation: select tasks with a new internal contract, existing-contract restructuring and a justified no-change outcome; compare assessment findings, review findings, behavior preservation and process cost. This update changes skill instructions; it does not include target Go changes or a BLOGS refactor.
 
 ## Context and problem
 
@@ -14,7 +27,7 @@ The user's concern is that GREEN tends to produce code sufficient to satisfy RED
 
 The proposed improvement is an explicit design assessment after GREEN, followed by justified, behavior-preserving refactoring. Passing tests establish covered behavior; they do not independently establish good design.
 
-### Current workflow observations
+### Workflow observations before this update
 
 - `SKILL.md` ends the feature/fix protocol at GREEN.
 - `references/testing.md` briefly mentions in-scope refactoring in the feature row, without a dedicated assessment procedure.

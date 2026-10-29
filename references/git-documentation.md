@@ -20,7 +20,7 @@ Untracked requirement/source documents may not appear in a new worktree. Preserv
 
 ## Required phase commits
 
-Features and bug fixes require one RED test checkpoint commit before behavior implementation, then one GREEN implementation commit after local verification. Pure refactors of already-correct behavior use the agreed GREEN test checkpoint before restructuring and a GREEN refactor commit afterward. These commits are core execution; follow the phase boundaries, staged-snapshot checks and exceptions in [red-green.md](red-green.md).
+Initial and assessment-selected phase commits are core execution. Use [red-green.md](red-green.md) for test-path selection, coherent unit granularity, staged-snapshot checks and exceptions. Features/fixes and new internal contracts use RED/GREEN checkpoints; existing-contract restructuring uses the agreed GREEN-before/after path. Assessment with no code changes requires no extra commit.
 
 Record each phase's commit SHA and ticket ID. Pipeline means local tests/checks: observe the intended result on the exact snapshot being committed; no push or remote CI is required.
 
@@ -30,7 +30,7 @@ For the pure-refactor exception, commit added/changed characterization coverage 
 
 Before the first checkpoint, resolve the message convention from explicit user directions and documented target rules. Inspect recent subjects with `git log -10 --format=%s` for compatible phase commits on the current branch. Reuse their established service identifier and formatting where applicable; obtain the current author from Git and the ticket from the user. History supplements the rules: a recent malformed subject does not establish a new convention.
 
-Follow the resolved target convention. When none is specified, this complete base format is required for both phases:
+Follow the resolved target convention. When none is specified, this complete base format is required for every phase:
 
 ```text
 <type>: [<author>][<ticket>][<service>] <PHASE> <imperative description>
@@ -39,29 +39,30 @@ Follow the resolved target convention. When none is specified, this complete bas
 - Obtain the author from `git config user.name`; apply the target's formatting convention.
 - Include a service bracket when the change concerns a service, without spaces between brackets in this base format.
 - Use the mandatory ticket ID supplied by the user; do not use placeholders, an absent-ticket fallback or an inferred originating-project ticket namespace.
-- Test checkpoints use uppercase `RED` for features/fixes or `GREEN` for the agreed pure-refactor exception. Implementation commits use `GREEN`; the following imperative description is lowercase, without a trailing period.
+- Test checkpoints use uppercase `RED` for features/fixes or new internal contracts, or `GREEN` for the agreed existing-contract restructuring exception. Implementation commits use `GREEN`; REFACTOR names a workflow phase, not a commit marker. The following imperative description is lowercase, without a trailing period.
 - Missing ticket information blocks entering change design or task implementation, including its RED test edits and checkpoint commit. Ask for the identifier and reuse it; context/setup or verification-only work does not trigger this gate.
 
 Default examples; `alice` and `TASK-123` are illustrative values, not inputs to reuse:
 
 ```text
-test: [TASK-123][alice] RED cover order total calculation
-feat: [TASK-123][alice] GREEN implement order total calculation
-test: [TASK-123][alice] RED cover order total calculation
-test: [TASK-123][alice] GREEN cover existing order behavior before refactor
+test: [alice][TASK-123] RED cover order total calculation
+feat: [alice][TASK-123] GREEN implement order total calculation
+test: [alice][TASK-123] RED cover title value validation
+refactor: [alice][TASK-123] GREEN encapsulate title validity
+test: [alice][TASK-123] GREEN cover existing order behavior before refactor
 ```
 
 Use `test` for a test checkpoint. A GREEN implementation commit uses `feat`, `fix` or `refactor` according to the actual change. Omit the service bracket when none applies. Follow a materially different target commit convention after resolving its requirements while retaining phase/ticket traceability.
 
 Before **every** RED or GREEN commit, including pure-refactor checkpoints:
 
-1. Draft the full subject using the resolved convention. Check the actual type, author, supplied ticket, applicable service, phase and imperative description against the rules above. Keep the same convention across both phases and resumed sessions unless explicit directions change it. A reminder to include a ticket and phase marker supplements the full format; it does not replace it. Under the base convention, `TASK-123 GREEN: ...` is incomplete.
+1. Draft the full subject using the resolved convention. Check the actual type, author, supplied ticket, applicable service, phase and imperative description against the rules above. Keep the same convention across all phases and resumed sessions unless explicit directions change it. A reminder to include a ticket and phase marker supplements the full format; it does not replace it. Under the base convention, `TASK-123 GREEN: ...` is incomplete.
 2. Apply any existing target message validator when available, then commit using the validated subject. These checks are part of the checkpoint, not a deferred review/handoff step.
 3. Read the actual subject with `git show -s --format=%s <checkpoint-sha>` and verify it still matches, including changes made by hooks. Record the SHA and actual subject in the result. A phase checkpoint is complete only when its contents, observed test result and message all satisfy the protocol. Report an existing invalid checkpoint without rewriting history unless rewording was explicitly requested.
 
 ## Additional Git actions
 
-The local RED/GREEN phase commits are included in implementation scope unless the user explicitly directs otherwise. Additional commits, push and MR/PR creation require requested scope. Phase commits alone do not authorize publishing a branch or creating an MR/PR. Keep one logical phase per commit and avoid unrelated formatting/refactoring.
+The local initial and assessment-selected phase commits are included in implementation scope unless the user explicitly directs otherwise. Other Git actions, including push and MR/PR creation, require requested scope. Phase commits alone do not authorize publishing a branch or creating an MR/PR. Keep one logical phase per commit and avoid unrelated formatting/refactoring.
 
 Discover the hosting provider, available CLI, repository and target branch. No fixed provider, `main` base branch or MR/PR tool is assumed. Descriptions explain the final problem/behavior, relevant validation and material limits.
 

@@ -11,6 +11,8 @@
 
 Ports describe actual operations required by domain/application and are implemented by adapters. Choose their owning inner layer according to responsibility and the target's valid patterns. Do not alias types across layers or create speculative interfaces without a real boundary.
 
+Use [design-assessment.md](design-assessment.md) to confirm invariant ownership before implementation and assess DDD/SRP/DRY/KISS after GREEN. It defines value-object/aggregate responsibilities, authority to refine a supplied design, scope and justified outcomes.
+
 ## Preserve the existing target
 
 - Locate the real module/service, package paths, entry points and composition root.

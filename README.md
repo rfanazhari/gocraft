@@ -5,7 +5,8 @@
 Gocraft keeps an AI coding agent inside the lines of a real Go codebase. It is a plain `SKILL.md` package, so it works with any agent that supports the skills format (Cursor, Claude Code, and others): it asks for the ticket first, maps clean-architecture layers onto the packages that **already exist**, settles the HTTP/gRPC contract before the handler, and proves the change with local test checkpoints.
 
 ```
-brief + ticket + existing Go tree  →  /gocraft  →  RED → RED commit → GREEN → GREEN commit
+brief + ticket + existing Go tree → /gocraft → confirm design → RED/GREEN checkpoints
+  → assess design → selected RED/GREEN or GREEN-before/after work → verify → report
 ```
 
 ## Contents
@@ -29,7 +30,8 @@ General-purpose agents tend to over-deliver on Go work: they scaffold new layout
 - **Ticket-gated.** A ticket ID must exist before design or code. It is never inferred from Git history.
 - **Layout-agnostic.** Domain / application / delivery / infrastructure are mapped onto whatever packages the target repo already has — no forced four-root structure, no Bazel/Gazelle assumption.
 - **Contract-first.** HTTP/gRPC contracts and error envelopes are settled before handlers are written.
-- **Test-first with evidence.** Features and fixes produce one RED test checkpoint commit, then one verified GREEN implementation commit. Pure refactors use a GREEN test checkpoint before restructuring and a verified GREEN refactor commit afterward.
+- **Test-first with evidence.** Features/fixes and new internal contracts use RED/GREEN checkpoints. Restructuring behind existing contracts uses a GREEN checkpoint before changes and a verified GREEN refactor commit afterward.
+- **Design assessed before completion.** Confirm invariant ownership before code, assess DDD/SRP/DRY/KISS after GREEN, and make only justified changes. Retaining a simple design with a rationale is valid.
 - **Version-verified libraries.** Preferred libraries (`clientmanager`, `logmanager`, `httpmanager`, `eventmanager`) are checked against the version actually on the **target** module, not copied from an example.
 - **Honest verification.** Mocks are never treated as proof of real SQL, broker, or HTTP behavior.
 
@@ -41,7 +43,7 @@ General-purpose agents tend to over-deliver on Go work: they scaffold new layout
 | Feature, bug fix, pure refactor, or checks-only run | Release, deploy, or "full handoff" |
 | Require a ticket ID before design or code | Infer a ticket from git history |
 | Map layers onto the real package layout | Force a fixed layout or Bazel/Gazelle |
-| Local RED → RED commit → GREEN → GREEN commit (pure-refactor exception applies) | Use mocks as evidence for SQL, broker, or HTTP behavior |
+| Local checkpoints, design assessment and justified scoped refactoring | Use mocks as evidence for SQL, broker, or HTTP behavior |
 
 Push, remote CI, MR/PR creation, deployment, documentation sync, and comprehensive diff review are **separate work**. Gocraft does not start them automatically.
 
@@ -129,10 +131,10 @@ Verification only — no implementation, no invented ticket requirement, no RED 
    | Upstream call or event | [integrations-events.md](references/integrations-events.md) |
    | A dependency's API | [libraries.md](references/libraries.md) |
 
-3. **Checkpoint** — follow the local test protocol ([red-green.md](references/red-green.md)):
-   - **Feature / bug fix:** write the test → establish RED for the *intended* reason → commit RED once with the ticket ID and `RED` marker → implement the minimum → rerun to GREEN and pass required checks → commit GREEN once. RED contains tests and only declarations/inert stubs needed to execute them; implementation belongs in GREEN.
-   - **Pure refactor (behavior unchanged):** establish GREEN → fill coverage gaps and record/commit the GREEN test checkpoint under the agreed exception → refactor → GREEN again with required checks → commit the verified refactor once with `GREEN`.
-4. **Report** — summarize the outcome with evidence (see below).
+3. **Confirm design** — briefly identify invariant ownership, affected responsibilities and preserved contracts using [design-assessment.md](references/design-assessment.md). Reuse the supplied design and surface material conflicts.
+4. **Checkpoint** — follow [red-green.md](references/red-green.md): features/fixes start with executable intended RED → RED test commit → implementation → required checks → GREEN commit. RED includes only tests and necessary declarations/inert stubs. Refactor tasks first establish an existing-behavior GREEN baseline and classify the selected work.
+5. **Assess and refine** — assess the actual design once per task/slice after GREEN. New internal contracts use meaningful RED/GREEN; existing-contract restructuring uses GREEN-before/after with characterization coverage where needed. Record justified changes, retained designs and deferred findings. Reassess the final diff and verify affected checks; no empty commits are required.
+6. **Report** — summarize the outcome with evidence (see below).
 
 The agent stops speculative changes after two unexplained failures, reports the evidence, and continues only with independent work.
 
@@ -141,7 +143,8 @@ The agent stops speculative changes after two unexplained failures, reports the 
 - The implemented change and affected code/artifacts
 - Ticket ID (when required)
 - Each phase's commit SHA and actual subject, verified against the full [commit-message convention](references/git-documentation.md#phase-commit-message-gate)
-- The exact RED command, working directory, and observed reason (features/fixes), or the agreed exception plus pre/post GREEN evidence (pure refactors)
+- The exact RED command, working directory and reason for each RED/GREEN unit, or the agreed exception plus pre/post GREEN evidence for existing-contract restructuring
+- Design mapping, assessment findings/dispositions, significant refinements to the supplied design and behavior-preservation limits
 - Local check results, clearly separated into **passed**, **failed**, **blocked / not run**, and **not applicable**
 - Blockers and downstream obligations still pending (docs, review)
 
@@ -167,6 +170,7 @@ gocraft/
     ├── requirements.md
     ├── go-standards.md
     ├── architecture.md
+    ├── design-assessment.md
     ├── api-errors.md
     ├── persistence.md
     ├── integrations-events.md
@@ -190,6 +194,7 @@ Agents load these on demand, not all at once. The full index with ownership and 
 | [requirements.md](references/requirements.md) | Reading supplied context or recovering a specific gap |
 | [go-standards.md](references/go-standards.md) | Before designing or editing Go |
 | [architecture.md](references/architecture.md) | Mapping changes to packages |
+| [design-assessment.md](references/design-assessment.md) | Every implementation task/slice: before code, after GREEN and before completion |
 | [api-errors.md](references/api-errors.md) | HTTP/gRPC behavior, handlers, errors, localization |
 | [persistence.md](references/persistence.md) | Queries, repositories, transactions, schema |
 | [integrations-events.md](references/integrations-events.md) | Upstream calls or events |

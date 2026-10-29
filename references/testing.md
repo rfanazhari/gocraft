@@ -6,7 +6,7 @@
 
 Scenarios come from the task, FSD, technical design, acceptance criteria, business rules and relevant contracts. Establish product decisions before writing tests that encode them.
 
-Follow [red-green.md](red-green.md): the ticket gate applies to design/implementation; features and fixes use observed local RED → one RED checkpoint commit → implementation → local GREEN and required checks → one GREEN implementation commit. The agreed pure-refactor exception uses a verified GREEN test checkpoint before restructuring and a verified GREEN refactor commit afterward. Remote CI is not the checkpoint runner.
+Follow [red-green.md](red-green.md) for the ticket gate, test-path selection and local phase commits. Features/fixes start with RED/GREEN; assessment-selected new internal contracts also require meaningful RED/GREEN. Restructuring behind existing contracts uses the agreed GREEN-before/after exception. Remote CI is not the checkpoint runner.
 
 Unit tests for delivery/infrastructure and other layers are optional and preferably not added unless requested. If only an adapter/transport changes, run relevant inner-layer regression tests; do not invent domain changes merely to add tests.
 
@@ -16,11 +16,14 @@ Integration checks are appropriate only where mocks cannot establish the behavio
 
 | Task type | Before implementation | Cycle and evidence |
 | --- | --- | --- |
-| Feature | Select a small public-behavior scenario | Write/run test → valid observed RED pipeline → checkpoint commit → minimum implementation → GREEN pipeline → any in-scope refactor and recheck → one GREEN commit. |
-| Bug fix | Establish expected/actual and a regression trigger | Write/run regression test before the fix → valid observed RED pipeline → checkpoint commit → fix → GREEN pipeline and relevant regression suite → one GREEN commit. |
-| Pure refactor | Run relevant existing unit tests and establish GREEN; add characterization tests first if coverage is insufficient | For already-correct unchanged behavior, record/commit the verified GREEN test checkpoint under the agreed protocol → refactor → GREEN again and one GREEN refactor commit. Record why RED does not apply; never fabricate failure. |
+| Feature | Select a small public-behavior scenario | Test → intended RED → RED commit → implementation → required checks → GREEN commit → design assessment and selected work. |
+| Bug fix | Establish expected/actual and a regression trigger | Regression test → intended RED → RED commit → fix → regression suite/required checks → GREEN commit → design assessment and selected work. |
+| Refactor introducing a new internal contract | Establish existing-behavior GREEN and specify the new contract | Contract tests → intended executable RED → RED commit → contract implementation/integration → regression suite/required checks → refactor GREEN commit. |
+| Existing-contract restructuring | Establish GREEN; add passing characterization tests first if coverage is insufficient | Record/commit the GREEN test checkpoint → refactor → required checks → refactor GREEN commit. Record why RED does not apply. |
 
-Existing passing unit tests can protect a pure refactor when their coverage is sufficient. Otherwise add characterization tests before production changes. Apply the agreed GREEN-checkpoint exception without asking for the same decision again; preserve behavior and record before/after evidence. Features and bug fixes still require a valid RED scenario.
+Existing passing unit tests can protect restructuring when coverage is sufficient. Otherwise add characterization tests before production changes. Apply the agreed GREEN-checkpoint exception without repeated approval. A new internal contract can require RED/GREEN while existing product behavior stays unchanged; use the classification and scaffolding rules in [red-green.md](red-green.md#assessment-selected-work).
+
+For every implementation task/slice, use [design-assessment.md](design-assessment.md) before code and after GREEN. Reassess after selected changes; retaining the design needs a rationale, not manufactured tests or commits.
 
 Behavioral RED must reflect the intended missing behavior/bug, not a syntax error, incorrect fixture or unavailable tool/resource. Record the relevant before/after commands/results; do not claim historical RED that was never observed.
 
@@ -69,6 +72,8 @@ Expected RED in an active TDD cycle is not an unexplained failure. Complete the 
 ## Determinism, coverage and evidence
 
 Use controllable time and deterministic inputs for boundary/lifecycle tests; avoid arbitrary sleeps and wall-clock assumptions. Test relevant accepted/rejected transitions, not-found, dependency failures and side-effect consequences through public operations.
+
+Specify expected policy results independently of the policy under test. Aggregate tests that reuse a production policy can verify integration, but do not independently establish that policy's correctness. Cover restoration, failure atomicity and error/timestamp compatibility when a selected refactor can affect them.
 
 Use `coverage.out`/`coverage.html`, with domain/application coverage and target CI scope. Do not invent new coverage thresholds or ad hoc per-package report filenames. Configure Sonar only when the target uses it.
 

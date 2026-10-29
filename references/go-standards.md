@@ -21,7 +21,7 @@ Apply these rules to new/changed code in the task. Keep unrelated legacy cleanup
 
 ## Structs and constructors
 
-- **Required:** use named struct types with public fields, not anonymous structs.
+- **Required:** use named struct types. Data carriers such as DTOs, query/projection results and infrastructure dependency structs use public fields. Aggregates, entities and value objects use private state where needed to protect invariants, with controlled construction and domain operations; public fields must not permit bypassing business rules. See [design-assessment.md](design-assessment.md).
 - A service-owned `NewX` constructor is appropriate only when it performs business validation and returns an error. Use validating construction for business objects and relevant command/input objects.
 - **Required:** repositories and infrastructure use plain structs; do not introduce constructors for them.
 - Dependency-provided constructors follow the verified dependency API; that does not authorize service-owned constructors that bypass this rule.

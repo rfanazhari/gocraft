@@ -24,6 +24,8 @@ A ticket ID explicitly supplied by the user is mandatory before change design or
 
 Read [go-standards.md](references/go-standards.md) before changing Go. Apply [architecture.md](references/architecture.md) when mapping responsibilities; preserve existing valid layout and task scope.
 
+For every implementation task/slice, read [design-assessment.md](references/design-assessment.md). Before code, briefly confirm invariant ownership, affected responsibilities and preserved contracts using the supplied design and actual code. Reuse existing mappings; resolve material conflicts without restarting a full design phase.
+
 Read the applicable branch before dependent code:
 
 | Trigger | Reference and decision |
@@ -39,7 +41,7 @@ Use clientmanager for outbound HTTP and logmanager for logging; prefer httpmanag
 
 For implementation, read [testing.md](references/testing.md), [red-green.md](references/red-green.md), and the mandatory [phase commit message gate](references/git-documentation.md#phase-commit-message-gate). Before every phase commit, validate the full resolved convention: type, author/ticket/service fields, phase and imperative description. Ticket + `RED`/`GREEN` alone is not the complete base format. Use the gate for both feature/fix and pure-refactor paths.
 
-**Pure refactor with already-correct behavior:** run relevant existing unit tests before production changes and establish GREEN. Fill coverage gaps with characterization tests first, record/commit the GREEN test checkpoint as specified in [red-green.md](references/red-green.md), then refactor, establish GREEN again with applicable checks and commit the refactor once with `GREEN`. Record why RED does not apply; this exception is already agreed and needs no repeated approval. Do not manufacture failure or use it for new behavior/bug fixes.
+**Refactor task:** establish an existing GREEN baseline, assess the proposed changes and select the path in [red-green.md](references/red-green.md#assessment-selected-work). A new internal contract requires meaningful RED/GREEN with regression checks during integration; restructuring behind existing contracts uses the agreed GREEN test checkpoint → refactor → verified GREEN exception. Fill characterization gaps first and preserve existing product behavior. The exception needs no repeated approval; never manufacture failure.
 
 **Feature or bug fix:** follow the RED path below.
 
@@ -54,10 +56,18 @@ The pipeline is local. One commit per completed phase is core execution under [r
 
 Read entire test files before editing; use public table-driven tests, appropriate fixtures and Mockery-generated mocks. Stop speculative changes after two unexpected failures without a clear cause, report evidence, and continue only independent work.
 
-## 4. Return the core execution result
+## 4. Assess after GREEN and resolve findings
 
-Inspect own changes sufficiently to verify behavior and preserve scope. Core completion requires requested implementation criteria, consistent implementation-critical artifacts and passing applicable mandatory local checks. HTTP runtime evidence is conditional on the change context; mocks do not establish real SQL/broker/HTTP behavior.
+For implementation, before core completion, follow [design-assessment.md](references/design-assessment.md): assess the actual design once per task/slice, record justified findings, and perform beneficial in-scope changes. Retaining the design with a short rationale is valid. Classify selected work before editing: new internal contracts return to RED/GREEN; existing-contract restructuring stays GREEN before/after; new product behavior or bug fixes require an appropriately scoped RED path.
 
-Briefly report the implemented change, affected code/artifacts, ticket ID when required, each phase's SHA/actual commit subject and local check results. Include the RED reason and any necessary non-test scaffolding for features/fixes, or the agreed exception and pre/post GREEN evidence for pure refactors, plus blockers and pending downstream obligations. Distinguish passed, failed, blocked/not run and not applicable.
+Apply [red-green.md](references/red-green.md) to the resulting checkpoints/commits, including separate verified refactor work when present. Reassess the final diff and rerun affected checks. No empty commits or forced patterns are required.
+
+## 5. Return the core execution result
+
+Inspect own changes sufficiently to verify behavior and preserve scope. Core implementation completion requires requested implementation criteria, completed design assessment, consistent implementation-critical artifacts and passing applicable mandatory local checks on the final state. Verification-only work reports requested checks without adding assessment or phase commits. HTTP runtime evidence is conditional on the change context; mocks do not establish real SQL/broker/HTTP behavior.
+
+Briefly report the implemented change, affected code/artifacts, ticket ID when required, each phase's SHA/actual commit subject and local check results. For each unit, include the RED reason and necessary non-test scaffolding, or the agreed exception and pre/post GREEN evidence, plus blockers and pending downstream obligations. Distinguish passed, failed, blocked/not run and not applicable.
+
+Include the initial design mapping or its reference, assessment outcomes and rationale, significant refinements to the supplied design, selected test paths and behavior-preservation limits. Record needed design-document synchronization for subsequent tasks.
 
 Documentation synchronization, comprehensive diff review and full handoff remain downstream subskill candidates; do not create or invoke them automatically. Required pending documentation/review still affects overall task/MR readiness even when the core phase passes. This skill neither provisions resources nor expands unrelated legacy work.

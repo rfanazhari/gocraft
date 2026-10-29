@@ -2,6 +2,24 @@
 
 This document records package checks and their limits. The historical reference-package snapshot predates `SKILL.md`; the later per-phase correction has separate evidence below.
 
+## Design-assessment update checks — 2026-10-29
+
+The approved workflow adds [design-assessment.md](design-assessment.md) and distinguishes assessment-selected new internal contracts from existing-contract restructuring in [red-green.md](red-green.md#assessment-selected-work). Workflow, completion, navigation, commit and encapsulation guidance were reviewed together; historical hypothesis/provenance notes identify the superseding decisions.
+
+The bundled `quick_validate.py` passed using Python 3.11 with PyYAML. Package checks passed for all 19 operational/overview Markdown files: local links and heading fragments, containment, navigation reachability from SKILL.md, balanced fences, whitespace, final newlines and the 150-line topic limit for SKILL.md/references. An isolated copy of SKILL.md, README.md and references passed the same checks, with matching file hashes. `git diff --check` passed. These are documentation changes; no target Go tests, lint, security or runtime checks were executed or claimed.
+
+Manual scenario walkthroughs checked the following routing decisions against the revised instructions:
+
+| Scenario | Walkthrough outcome |
+| --- | --- |
+| Introduce a validated title value object into a working aggregate | Specify the new contract and independent expectations; use compile-required inert scaffolding for executable RED, then implement/integrate and verify existing-behavior regressions at GREEN. Existing regressions remain passing at RED. |
+| Extract private validation without changing its existing contract | Establish GREEN, fill characterization gaps first, record/commit that checkpoint, restructure and verify GREEN. Reuse an existing matching checkpoint if no test changes are needed. |
+| Simple read/query task with sufficient responsibilities and no justified structural improvement | Record no domain-model changes, assess applicable design concerns and retain with rationale. No extra type, test failure or commit is required. |
+| Tighten restoration so previously accepted persisted state is rejected earlier | Treat the acceptance/failure-timing change as a behavior decision; resolve its scope before a feature/fix RED path. Do not classify it as behavior-preserving restructuring. |
+| Verification-only request without a ticket | Run requested checks without inventing implementation, design assessment or phase commits. |
+
+The verification-only walkthrough exposed overly broad completion wording; completion statements now explicitly scope assessment/checkpoints to implementation. These walkthroughs are instruction reviews, not executed Go tasks or fresh-agent evaluations. A 2–3 real-task pilot remains pending. Capture early and post-GREEN findings, dispositions, review findings, compatibility evidence, assessment cost and commit usefulness; compare cases with a new internal contract, existing-contract restructuring and a no-change outcome. The small pilot provides exploratory evidence, not a causal claim or proof of improved design quality.
+
 ## Commit-message correction checks — 2026-10-27
 
 Local history confirmed that `83a0f27` and `55c66f1` used ticket/phase-only subjects while the preceding phase commits used the complete type/bracket/phase convention. Inspection found that the complete template was under additional Git actions and phase steps mentioned a narrower set of fields. The correction gives message validation its own mandatory section and links it from both phase steps and verification.
