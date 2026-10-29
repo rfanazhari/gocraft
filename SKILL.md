@@ -39,7 +39,7 @@ Use clientmanager for outbound HTTP and logmanager for logging; prefer httpmanag
 
 ## 3. Execute the local test-checkpoint protocol
 
-For implementation, read [testing.md](references/testing.md), [red-green.md](references/red-green.md), and the mandatory [phase commit message gate](references/git-documentation.md#phase-commit-message-gate). Before every phase commit, validate the full resolved convention: type, author/ticket/service fields, phase and imperative description. Ticket + `RED`/`GREEN` alone is not the complete base format. Use the gate for both feature/fix and pure-refactor paths.
+For implementation, read [testing.md](references/testing.md), [red-green.md](references/red-green.md), and the mandatory [phase commit message gate](references/git-documentation.md#phase-commit-message-gate). Before every phase commit, validate the full resolved convention: type, ticket, author, phase and imperative description, plus service fields or scopes only when explicitly required by the user or documented target convention. Ticket + `RED`/`GREEN` alone is not the complete base format. Use the gate for both feature/fix and pure-refactor paths.
 
 **Refactor task:** establish an existing GREEN baseline, assess the proposed changes and select the path in [red-green.md](references/red-green.md#assessment-selected-work). A new internal contract requires meaningful RED/GREEN with regression checks during integration; restructuring behind existing contracts uses the agreed GREEN test checkpoint → refactor → verified GREEN exception. Fill characterization gaps first and preserve existing product behavior. The exception needs no repeated approval; never manufacture failure.
 

@@ -28,16 +28,16 @@ For the pure-refactor exception, commit added/changed characterization coverage 
 
 ## Phase commit message gate
 
-Before the first checkpoint, resolve the message convention from explicit user directions and documented target rules. Inspect recent subjects with `git log -10 --format=%s` for compatible phase commits on the current branch. Reuse their established service identifier and formatting where applicable; obtain the current author from Git and the ticket from the user. History supplements the rules: a recent malformed subject does not establish a new convention.
+Before the first checkpoint, resolve the message convention from explicit user directions and documented target rules. Inspect recent subjects with `git log -10 --format=%s` for compatible phase commits on the current branch. Reuse formatting only when it matches the resolved convention; obtain the current author from Git and the ticket from the user. History supplements the rules: a recent malformed subject does not establish a new convention.
 
 Follow the resolved target convention. When none is specified, this complete base format is required for every phase:
 
 ```text
-<type>: [<author>][<ticket>][<service>] <PHASE> <imperative description>
+<type>: [<ticket>][<author>] <PHASE> <imperative description>
 ```
 
 - Obtain the author from `git config user.name`; apply the target's formatting convention.
-- Include a service bracket when the change concerns a service, without spaces between brackets in this base format.
+- In the base format, use an unscoped type followed by the ticket and author brackets, in that order with no space between brackets. Service fields or scopes require an explicit user direction or documented target convention.
 - Use the mandatory ticket ID supplied by the user; do not use placeholders, an absent-ticket fallback or an inferred originating-project ticket namespace.
 - Test checkpoints use uppercase `RED` for features/fixes or new internal contracts, or `GREEN` for the agreed existing-contract restructuring exception. Implementation commits use `GREEN`; REFACTOR names a workflow phase, not a commit marker. The following imperative description is lowercase, without a trailing period.
 - Missing ticket information blocks entering change design or task implementation, including its RED test edits and checkpoint commit. Ask for the identifier and reuse it; context/setup or verification-only work does not trigger this gate.
@@ -45,18 +45,20 @@ Follow the resolved target convention. When none is specified, this complete bas
 Default examples; `alice` and `TASK-123` are illustrative values, not inputs to reuse:
 
 ```text
-test: [alice][TASK-123] RED cover order total calculation
-feat: [alice][TASK-123] GREEN implement order total calculation
-test: [alice][TASK-123] RED cover title value validation
-refactor: [alice][TASK-123] GREEN encapsulate title validity
-test: [alice][TASK-123] GREEN cover existing order behavior before refactor
+test: [TASK-123][alice] RED cover order total calculation
+feat: [TASK-123][alice] GREEN implement order total calculation
+test: [TASK-123][alice] RED cover title value validation
+refactor: [TASK-123][alice] GREEN encapsulate title validity
+test: [TASK-123][alice] GREEN cover existing order behavior before refactor
 ```
 
-Use `test` for a test checkpoint. A GREEN implementation commit uses `feat`, `fix` or `refactor` according to the actual change. Omit the service bracket when none applies. Follow a materially different target commit convention after resolving its requirements while retaining phase/ticket traceability.
+For a blogs migration checkpoint, the base subject is `test: [BLOG-001][<author>] RED cover blogs migration up and down contract`; replace `<author>` with the resolved Git author before committing.
+
+Use `test` for a test checkpoint. A GREEN implementation commit uses `feat`, `fix` or `refactor` according to the actual change. Follow a materially different target commit convention after resolving its requirements while retaining phase/ticket traceability.
 
 Before **every** RED or GREEN commit, including pure-refactor checkpoints:
 
-1. Draft the full subject using the resolved convention. Check the actual type, author, supplied ticket, applicable service, phase and imperative description against the rules above. Keep the same convention across all phases and resumed sessions unless explicit directions change it. A reminder to include a ticket and phase marker supplements the full format; it does not replace it. Under the base convention, `TASK-123 GREEN: ...` is incomplete.
+1. Draft the full subject using the resolved convention. Check the actual type, supplied ticket, author, phase and imperative description against the rules above, plus service fields or scopes only when explicitly required by the user or documented target convention. Keep the same convention across all phases and resumed sessions unless explicit directions change it. A reminder to include a ticket and phase marker supplements the full format; it does not replace it. Under the base convention, `TASK-123 GREEN: ...` is incomplete.
 2. Apply any existing target message validator when available, then commit using the validated subject. These checks are part of the checkpoint, not a deferred review/handoff step.
 3. Read the actual subject with `git show -s --format=%s <checkpoint-sha>` and verify it still matches, including changes made by hooks. Record the SHA and actual subject in the result. A phase checkpoint is complete only when its contents, observed test result and message all satisfy the protocol. Report an existing invalid checkpoint without rewriting history unless rewording was explicitly requested.
 

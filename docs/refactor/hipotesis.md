@@ -121,13 +121,13 @@ Suggested experiment: compare 2–3 real tasks with and without the new phase, i
 
 ### H2 — Refactoring gets separate commits
 
-Original proposed format:
+Proposed format, aligned with the current base commit convention:
 
 ```text
-refactor: [author][ticket][service] GREEN restructure <description>
+refactor: [<ticket>][<author>] GREEN restructure <description>
 ```
 
-REFACTOR names the workflow phase; GREEN remains the proposed commit marker for its verified state. Preserve the existing resolved message convention and applicability of the service field.
+REFACTOR names the workflow phase; GREEN remains the proposed commit marker for its verified state. Resolve the full message convention using the [phase commit message gate](../../references/git-documentation.md#phase-commit-message-gate), including any explicitly required service fields or scopes.
 
 Discussion: separate commits are plausible for review and revert clarity. One commit per small refactor step versus a larger verified refactor unit remains undecided. Do not manufacture empty commits.
 
