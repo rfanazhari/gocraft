@@ -10,9 +10,11 @@ Distinguish a query-only change from a schema change; the former does not automa
 
 ## SQL and ORM rules
 
-- **Required:** raw SQL is the default; the base policy targets at least 70% raw SQL repository implementations. This is not a mandate to convert unrelated repositories or add dummy implementations to change a ratio.
-- GORM is the permitted ORM exception for operations joining at most two tables. More than two joined tables, complex subqueries, unions and calculations require raw SQL.
-- Keep persistence models in infrastructure without API `json` tags; do not return them directly as API responses.
+- **Default when SQL is selected:** use GORM for CRUD and simple queries. Explicit user and target project instructions take precedence. Follow the accepted design and assess the existing adapter and compatibility; this default alone does not justify converting working persistence or adding a database to the task.
+- Use raw SQL when it improves clarity, supports complex query requirements (such as reporting, subqueries, unions or calculations), or addresses a measured performance need. Choose by query requirements and evidence, without a raw SQL percentage target or a fixed table-count limit. Raw SQL may use GORM's `Raw`/`Exec` within the same transaction where appropriate.
+- Keep the adapter choice, material raw SQL exceptions and reasons, model mapping and transaction boundaries consistent with the accepted design. Record material refinements for design-document synchronization and carry them into affected tasks and verification.
+- Keep persistence models and GORM dependencies in infrastructure, separate from domain models and API DTOs. Keep persistence models without API `json` tags and map them to explicit response types. Keep business rules in their assessed owners rather than moving them into ORM hooks.
+- Verify relevant GORM behavior against the selected version: explicitly select update fields when persisting zero values (`false`, `0`, empty strings), inspect association queries for N+1 risk, and define soft-deletion behavior when used. Verify real database behavior where mocks cannot establish the required correctness or performance, following Evidence and completion below.
 - **Required:** propagate context through every database operation. Use context-aware query/exec APIs, or GORM `WithContext` where applicable.
 - Parameterize values, such as PostgreSQL `$1`, `$2`; never concatenate or format user input into SQL. Validate/allowlist dynamic identifiers and ordering separately when needed.
 - Handle query, scan, iteration (`rows.Err()`), commit and rollback errors as applicable; close owned resources.
@@ -39,6 +41,8 @@ Schema, model mappings and repository statements must agree. Indexing a foreign 
 ## Migration artifacts
 
 **Conditional schema change:** the base tooling is golang-migrate. Find the target's migration directory and history first; the PostgreSQL reference location is `migrations/pgsql/` relative to its module/service.
+
+Keep schema changes reviewable through explicit migration files rather than runtime GORM `AutoMigrate`.
 
 Create a new up/down pair with a current `YYYYMMDDHHmmss_description.{up,down}.sql` prefix. Use `date +%Y%m%d%H%M%S` when explicitly generating a timestamp. Do not copy an old timestamp, use placeholders, or rewrite an already-applied migration as a substitute for a new change.
 

@@ -13,7 +13,7 @@ This policy remains part of the agreed standard for general Go targets. General 
 
 Add only dependencies used by the task. A domain event does not automatically require a broker or eventmanager; an existing endpoint does not require a framework migration. Do not add logging I/O to pure domain behavior just to place a logging import in every layer.
 
-Other scoped base dependencies are go-i18n/v2 for localization, testify for tests, Mockery for generated mocks, GORM as the permitted ORM exception, golang-migrate for migration artifacts, and Buf/proto3 when gRPC definitions change. Match target versions and resolve material tooling conflicts without unrelated migration.
+Other scoped base dependencies are go-i18n/v2 for localization, testify for tests, Mockery for generated mocks, GORM for SQL persistence under [persistence.md](persistence.md), golang-migrate for migration artifacts, and Buf/proto3 when gRPC definitions change. Match target versions and resolve material tooling conflicts without unrelated migration.
 
 ## Verify before adopting an example or integration
 
