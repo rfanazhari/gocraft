@@ -129,7 +129,7 @@ Verification only — no implementation, no invented ticket requirement, no RED 
    | Change touches | Reference |
    |---|---|
    | Endpoint, transport, error/localization | [api-errors.md](references/api-errors.md) |
-   | Query, transaction, schema, stored data | [persistence.md](references/persistence.md) |
+   | Query, transaction, schema, stored data, initial/reference data or seeder | [persistence.md](references/persistence.md) |
    | Upstream call or event | [integrations-events.md](references/integrations-events.md) |
    | A dependency's API | [libraries.md](references/libraries.md) |
 
@@ -155,7 +155,7 @@ The agent stops speculative changes after two unexplained failures, reports the 
 - **Adapt to the target.** Discover real packages and tools; never assume one monorepo, Git host, or build system.
 - **Contract before handler.** HTTP/gRPC contracts and error envelopes settle first.
 - **Preferred stack.** `clientmanager` for outbound HTTP, `logmanager` for logging, `httpmanager` / `eventmanager` when they fit — verified against the version on the target.
-- **Core vs. later.** Migrations, error catalogs, and mocks are in scope when the change needs them; wide documentation sync is separate work.
+- **Core vs. later.** Migrations, required seed data and loaders, error catalogs, and mocks are in scope when the change needs them; wide documentation sync is separate work.
 - **Local evidence.** RED/GREEN comes from the relevant local pipeline, not from a mock standing in for a real dependency (unless the acceptance criteria say so).
 - **Table-driven public tests** with appropriate fixtures and Mockery-generated mocks.
 
@@ -201,7 +201,7 @@ Agents load these on demand, not all at once. The full index with ownership and 
 | [architecture.md](references/architecture.md) | Mapping changes to packages |
 | [design-assessment.md](references/design-assessment.md) | Every implementation task/slice: before code, after GREEN and before completion |
 | [api-errors.md](references/api-errors.md) | HTTP/gRPC behavior, handlers, errors, localization |
-| [persistence.md](references/persistence.md) | Queries, repositories, transactions, schema |
+| [persistence.md](references/persistence.md) | Queries, repositories, transactions, schema, stored data, initial/reference data or seeder |
 | [integrations-events.md](references/integrations-events.md) | Upstream calls or events |
 | [libraries.md](references/libraries.md) | Selecting or using a dependency API |
 | [testing.md](references/testing.md) | Before adding/editing tests |

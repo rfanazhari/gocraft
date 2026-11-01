@@ -29,7 +29,7 @@ Workspace preparation is conditional. Reuse a suitable supplied/prepared task wo
 
 ## Core implementation artifacts
 
-Include artifacts that the requested implementation needs to function and pass verification: migrations/schema changes, error codes and translations, generated mocks/proto, dependency files and required configuration examples. These are part of implementation, not automatically deferred with documentation work.
+Include artifacts that the requested implementation needs to function and pass verification: migrations/schema changes, required reference/seed data and its loader, error codes and translations, generated mocks/proto, dependency files and required configuration examples. These are part of implementation, not automatically deferred with documentation work.
 
 New or changed contracts must be settled before their handlers. Use a sufficient supplied contract directly; recover a missing one before dependent implementation. Formal synchronization of broader documentation can be handed to a downstream subskill.
 

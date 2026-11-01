@@ -19,7 +19,7 @@ Use the supplied context and verification plan directly when sufficient; select 
 | Security | Required: the target security check or relevant equivalent such as `govulncheck ./...`; record tool, scope and results. |
 | Shared modules/consumers | Conditional: verify directly affected packages/consumers and record cross-module coverage limits. |
 | Generated and dependency artifacts | Conditional: regenerate/reconcile relevant mocks, proto and Go dependency files; review their diffs. |
-| HTTP/integration/migration behavior | Conditional on change context and criteria; distinguish mocks, controlled resources and actual runtime evidence. |
+| HTTP/integration/migration/seed behavior | Conditional on change context and criteria; use [persistence.md](persistence.md#evidence-and-completion) for migration/seed claims and distinguish mocks, controlled resources and actual runtime evidence. |
 | CI | Conditional on separately requested remote CI/MR/PR scope: inspect actual results. The checkpoint pipeline is local; local success is not CI success. |
 
 Use `go test` to verify code, never `go build`, `go run`, an image build or an unexecuted command list as a replacement. Inspect scripts/Make targets for unwanted publication/deployment effects.

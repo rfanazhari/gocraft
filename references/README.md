@@ -15,7 +15,7 @@ The skill entry point is [SKILL.md](../SKILL.md). It defines core execution and 
 | [architecture.md](architecture.md) | Mapping changes to packages | Layer boundaries, existing layout, ports, composition and lifecycle. |
 | [design-assessment.md](design-assessment.md) | Every implementation task/slice: before code, after GREEN and before completion | Invariant mapping, design authority, DDD/SRP/DRY/KISS assessment, scoped refactoring and justified dispositions. |
 | [api-errors.md](api-errors.md) | HTTP/gRPC behavior, handlers, errors, localization change | Contract first, compatibility, envelope, safe errors and translations. |
-| [persistence.md](persistence.md) | Queries, repositories, transactions, schema or stored data change | SQL, ORM, indexes, migrations, data safety. |
+| [persistence.md](persistence.md) | Queries, repositories, transactions, schema, stored data, initial/reference data or seeder | SQL, ORM, indexes, migrations, seed datasets, reruns and data safety. |
 | [integrations-events.md](integrations-events.md) | Upstream calls or events change | Contracts, failure semantics, side effects, concurrency and delivery. |
 | [libraries.md](libraries.md) | Selecting or using a dependency API | Required/preferred libraries, effective versions, compatibility evidence. |
 | [testing.md](testing.md) | Before adding/editing tests or implementing covered code | TDD, refactors, public tests, fixtures, generated mocks, execution order. |

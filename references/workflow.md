@@ -51,7 +51,7 @@ Complete when each planned change has a criterion or direct prerequisite and eac
 Trigger: an active change lacks a required API/data/upstream/event/dependency decision. A sufficient supplied decision is used directly rather than redesigned.
 
 - **Conditional API:** establish or update the contract and compatibility before the handler, using [api-errors.md](api-errors.md). A fix may restore an unchanged contract; a pure refactor preserves it.
-- **Conditional persistence:** settle schema/query/transaction changes, existing-data handling and rollback consequences using [persistence.md](persistence.md).
+- **Conditional persistence:** settle schema/query/transaction changes, required reference/seed data, existing-data handling and rollback consequences using [persistence.md](persistence.md).
 - **Conditional upstream/event:** settle port, payload, failure, side-effect and lifecycle semantics using [integrations-events.md](integrations-events.md).
 - **Conditional dependency:** verify effective versions and APIs using [libraries.md](libraries.md) before adopting an integration or example.
 
@@ -70,7 +70,7 @@ Entering implementation requires the supplied ticket ID even with complete conte
 - Apply [testing.md](testing.md): TDD is required for additions/changes in mandatory unit-test directories for features, fixes and refactors.
 - For a refactor task, establish an existing GREEN baseline, assess the selected changes and classify their test paths before production edits. New internal contracts require RED/GREEN; existing-contract restructuring uses the agreed GREEN-before/after exception with characterization coverage when needed. Preserve product behavior and never fabricate RED.
 - Implement the minimum behavior, real wiring, context propagation and safe error handling. Regenerate mocks when a tested interface changes.
-- Include implementation-critical migration/schema, error/translation, dependency, generated-code and configuration artifacts required by the requested change; broader documentation synchronization belongs to the downstream boundary below.
+- Include implementation-critical migration/schema, required reference/seed data and loaders, error/translation, dependency, generated-code and configuration artifacts required by the requested change; broader documentation synchronization belongs to the downstream boundary below.
 - Keep nearby legacy edits limited to what the task needs. After test edits, run the specific test, then the unit suite when green.
 - After the verified GREEN checkpoint, complete [design-assessment.md](design-assessment.md) once per task/slice. Perform justified selected work using its applicable checkpoints, then reassess the final diff. Record retained/deferred findings with reasons; no-change outcomes require no extra commit.
 
