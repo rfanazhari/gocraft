@@ -129,7 +129,7 @@ Verification only — no implementation, no invented ticket requirement, no RED 
    | Change touches | Reference |
    |---|---|
    | Endpoint, transport, error/localization | [api-errors.md](references/api-errors.md) |
-   | Query, transaction, schema, stored data, initial/reference data or seeder | [persistence.md](references/persistence.md) |
+   | Query, transaction, schema, stored data, initial/reference data or seeder | [persistence.md](references/persistence.md), plus [persistence-migrations.md](references/persistence-migrations.md) / [persistence-seeders.md](references/persistence-seeders.md) as needed |
    | Upstream call or event | [integrations-events.md](references/integrations-events.md) |
    | A dependency's API | [libraries.md](references/libraries.md) |
 
@@ -178,6 +178,8 @@ gocraft/
     ├── design-assessment.md
     ├── api-errors.md
     ├── persistence.md
+    ├── persistence-migrations.md
+    ├── persistence-seeders.md
     ├── integrations-events.md
     ├── libraries.md
     ├── testing.md
@@ -203,7 +205,9 @@ Agents load these on demand, not all at once. The full index with ownership and 
 | [architecture.md](references/architecture.md) | Mapping changes to packages |
 | [design-assessment.md](references/design-assessment.md) | Every implementation task/slice: before code, after GREEN and before completion |
 | [api-errors.md](references/api-errors.md) | HTTP/gRPC behavior, handlers, errors, localization |
-| [persistence.md](references/persistence.md) | Queries, repositories, transactions, schema, stored data, initial/reference data or seeder |
+| [persistence.md](references/persistence.md) | Queries, repositories, transactions, schema, stored data |
+| [persistence-migrations.md](references/persistence-migrations.md) | Schema change or versioned data migration |
+| [persistence-seeders.md](references/persistence-seeders.md) | Initial/reference data or a seeder |
 | [integrations-events.md](references/integrations-events.md) | Upstream calls or events |
 | [libraries.md](references/libraries.md) | Selecting or using a dependency API |
 | [testing.md](references/testing.md) | Before adding/editing tests |

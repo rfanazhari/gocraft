@@ -1,6 +1,6 @@
-# Persistence, SQL, migrations and seeders
+# Persistence and SQL
 
-**Trigger:** queries, repositories, transactions, constraints, schema, stored-data behavior, master/reference data, initial data or a seeder request. Follow only the branches needed by the task.
+**Trigger:** queries, repositories, transactions, constraints, schema, stored-data behavior, master/reference data, initial data or a seeder request. Follow only the branches needed by the task: read [persistence-migrations.md](persistence-migrations.md) for schema/versioned-data migrations and [persistence-seeders.md](persistence-seeders.md) for reference/initial data or a seeder; a query-only or repository change needs neither.
 
 ## Establish behavior before changing the adapter
 
@@ -39,56 +39,6 @@ Apply to scoped new/changed schema; do not rename unrelated legacy tables.
 | Index coverage | Foreign IDs, unique values, second identifiers and supported text-search columns. |
 
 Schema, model mappings and repository statements must agree. Indexing a foreign key is distinct from adding the relationship constraint; assess both where relevant.
-
-## Migration artifacts
-
-**Conditional schema or versioned data migration:** the base tooling is golang-migrate. Find the target's migration directory and history first; the PostgreSQL reference location is `migrations/pgsql/` relative to its module/service.
-
-Keep schema changes reviewable through explicit migration files rather than runtime GORM `AutoMigrate`.
-
-Create a new up/down pair with a current `YYYYMMDDHHmmss_description.{up,down}.sql` prefix. Use `date +%Y%m%d%H%M%S` when explicitly generating a timestamp. Do not copy an old timestamp, use placeholders, or rewrite an already-applied migration as a substitute for a new change.
-
-The creation command, adapted to the target's actual path, has this form:
-
-```sh
-migrate create -ext sql -dir migrations/pgsql <description>
-```
-
-If the target's established migration tooling materially conflicts with the base tooling, record and settle that decision before dependent changes; avoid a tooling migration unrelated to the task.
-
-**Conditional existing data:** document backfill, defaults, constraint timing and compatibility between old/new application and schema states. Review rollback consequences: a down file is not proof that deleted data can be recovered.
-
-Schema/ERD and broader operational-note updates are downstream documentation obligations when affected; record them under [scope-routing.md](scope-routing.md). Required schema/migration/seed artifacts and the execution details needed to use them remain core work. Creating files does not authorize applying them to a remote database. Destructive data changes and remote execution require supported task scope and the environment's applicable authorization.
-
-## Reference data and seeders
-
-**Conditional initial data or seeder:** implement the data required by the accepted feature or seeder request, using supplied requirements or authoritative project data. Identify the target storage, concrete records and relevant values, stable keys, purpose, source and target environments. Keep optional demo/test datasets distinct from required operational data. Label illustrative values as proposals; if required business values are unknown, identify the missing source/decision and leave only dependent work pending.
-
-Choose delivery by purpose and follow the target's mechanism and location:
-
-| Artifact | Purpose |
-| --- | --- |
-| Schema migration | Change tables, columns, constraints or indexes. |
-| Reference-data migration | Deliver required reference records as a versioned change. |
-| Backfill | Populate or transform existing rows for the accepted change. |
-| Repeatable seeder | Load or reconcile a named dataset on explicit execution. |
-| Test fixture/demo seed | Supply test or demonstration data in its intended environment. |
-
-A data migration or seeder can perform a backfill; name which artifact owns each dataset/change so it is delivered once. A seeder request includes its dataset, not just an empty runner. Reuse sufficient accepted decisions rather than restarting planning.
-
-**Default seeder locations:** reuse the target's existing seed mechanism and directories. If none exist, use the following fallback paths relative to the owning module/service, adapting them to its established layout and recording the choice:
-
-| Location | Responsibility |
-| --- | --- |
-| `cmd/seed/main.go` | Seeder entry point: configuration, dependency wiring, runner invocation and resource cleanup. |
-| `internal/infrastructure/seeder/` | Seed implementation and datasets, following the data/ownership rules below. |
-
-Keep the entry point thin and create only the files needed by the task. Reference data delivered through versioned migrations stays in the target's migration directory under Migration artifacts above; it does not also need a seeder copy.
-
-- Define rerun and conflict behavior using stable keys and matching uniqueness rules. Specify whether existing values are preserved, updated or rejected, accounting for user-managed values; a blanket upsert is not a substitute for that decision.
-- Order schema prerequisites before data loads, referenced records before dependents, and required data before consuming flows. Define the transaction boundary and failure/retry behavior needed to avoid duplicate or partially loaded required data.
-- Make cleanup/rollback account for existing references and user-managed rows. If reversal would lose data or break references, provide a recovery path and state the limit instead of assuming a down migration or delete-by-key is safe.
-- Include the runnable entry point, prerequisites, target environments and execution order in the core result or existing task notes. Keep demo/test data confined to its intended environments; follow the target's execution convention without adding automatic application-startup seeding by default.
 
 ## Evidence and completion
 
