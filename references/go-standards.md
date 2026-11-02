@@ -30,7 +30,7 @@ Apply to new/changed code in the task; unrelated legacy cleanup stays out of sco
 - **Recommended:** keep non-test, non-generated Go files below 300 lines; at 500 lines, splitting by responsibility is required.
 - Group private variables/constants at the top in `var (...)` / `const (...)` blocks; private functions before public ones.
 - Run `gofmt` on changed Go files; `golangci-lint` must pass with a compatible target configuration. Generated `*_mock.go` may be excluded per target configuration; never use exclusions to hide handwritten-code failures.
-- Edit Go through complete-block rewrites or exact replacement; no regex shell editing (`sed`/`awk`). Verify with `go test`, not `go build` or `go run`.
+- Edit Go through exact replacement or insertion of only the changed lines (a complete-block rewrite only when most of the block changes); no regex shell editing (`sed`/`awk`). Verify with `go test`, not `go build` or `go run`.
 - Keep Markdown focused on one topic, around 150 lines or fewer; split into an index and focused references when it grows. Business-documentation limits: [git-docs-downstream.md](git-docs-downstream.md).
 
 ## Configuration and resource ownership
