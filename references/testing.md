@@ -6,7 +6,7 @@
 
 Scenarios come from the task, FSD, technical design, acceptance criteria, business rules and relevant contracts. Establish product decisions before writing tests that encode them.
 
-Follow [red-green.md](red-green.md) for the ticket gate, test-path selection and local phase commits. Features/fixes start with RED/GREEN; assessment-selected new internal contracts also require meaningful RED/GREEN. Restructuring behind existing contracts uses the agreed GREEN-before/after exception. Remote CI is not the checkpoint runner.
+Follow [red-green.md](red-green.md) for the ticket gate, test-path selection (feature/fix, new internal contract, existing-contract restructuring) and local phase commits.
 
 Unit tests for delivery/infrastructure and other layers are optional and preferably not added unless requested. If only an adapter/transport changes, run relevant inner-layer regression tests; do not invent domain changes merely to add tests.
 
@@ -16,14 +16,12 @@ Integration checks are appropriate only where mocks cannot establish the behavio
 
 | Task type | Before implementation | Cycle and evidence |
 | --- | --- | --- |
-| Feature | Select a small public-behavior scenario | Test → intended RED → RED commit → implementation → required checks → GREEN commit → design assessment and selected work. |
-| Bug fix | Establish expected/actual and a regression trigger | Regression test → intended RED → RED commit → fix → regression suite/required checks → GREEN commit → design assessment and selected work. |
-| Refactor introducing a new internal contract | Establish existing-behavior GREEN and specify the new contract | Contract tests → intended executable RED → RED commit → contract implementation/integration → regression suite/required checks → refactor GREEN commit. |
-| Existing-contract restructuring | Establish GREEN; add passing characterization tests first if coverage is insufficient | Record/commit the GREEN test checkpoint → refactor → required checks → refactor GREEN commit. Record why RED does not apply. |
+| Feature | Select a small public-behavior scenario | RED/GREEN cycle, then design assessment and selected work. |
+| Bug fix | Establish expected/actual and a regression trigger | Regression test as RED, fix as GREEN, then regression suite and assessment. |
+| Refactor introducing a new internal contract | Establish existing-behavior GREEN and specify the new contract | Contract tests as intended RED, then implementation/integration as GREEN. |
+| Existing-contract restructuring | Establish GREEN; add passing characterization tests first if coverage is insufficient | GREEN test checkpoint, refactor, GREEN again; record why RED does not apply. |
 
-Existing passing unit tests can protect restructuring when coverage is sufficient. Otherwise add characterization tests before production changes. Apply the agreed GREEN-checkpoint exception without repeated approval. A new internal contract can require RED/GREEN while existing product behavior stays unchanged; use the classification and scaffolding rules in [red-green.md](red-green.md#assessment-selected-work).
-
-For every implementation task/slice, use [design-assessment.md](design-assessment.md) before code and after GREEN. Reassess after selected changes; retaining the design needs a rationale, not manufactured tests or commits.
+Checkpoints, classification and scaffolding rules: [red-green.md](red-green.md#assessment-selected-work). Existing passing unit tests can protect restructuring when coverage is sufficient; otherwise add characterization tests before production changes. Design assessment applies to every implementation task/slice per [design-assessment.md](design-assessment.md); retaining the design needs a rationale, not manufactured tests or commits.
 
 Behavioral RED must reflect the intended missing behavior/bug, not a syntax error, incorrect fixture or unavailable tool/resource. Record the relevant before/after commands/results; do not claim historical RED that was never observed.
 

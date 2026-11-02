@@ -76,18 +76,8 @@ Optional integration suites remain opt-in and are not universal merge gates. The
 
 Existing failures can be distinguished from task regressions but cannot be reported as passed. Do not disable checks, change expectations merely to get green, or suppress errors with `|| true`.
 
-## Own-change verification and brief core result
+## Own-change verification and result
 
-Inspect own changes, including tracked/staged edits, new files, renames/deletions, generated code and dependency changes against available context/base. Verify criterion coverage, responsibilities, auth/tenant behavior, compatibility, SQL/side-effect risks, error sanitization and scope. This supports implementation verification; a separate comprehensive diff review is a downstream subskill candidate.
+Inspect own changes, including tracked/staged edits, new files, renames/deletions, generated code and dependency changes against available context/base. Verify criterion coverage, responsibilities, auth/tenant behavior, compatibility, SQL/side-effect risks, error sanitization and scope. A separate comprehensive diff review is downstream work. Fix in-scope findings and rerun affected checks; record independent debt without expanding the change.
 
-Fix in-scope findings and rerun affected checks. Record independent debt without expanding the change automatically. Return a brief core result:
-
-- Final observable behavior and important changed files.
-- Implementation criteria/evidence and material decisions/conflicts; include workspace/base when needed to identify the result.
-- Actual commands, working directories and outcomes; summarize logs without secrets.
-- Include the supplied ID when design/implementation triggers the ticket gate; report all initial and assessment-selected phase SHAs/actual subjects and local results. Each unit needs its RED/GREEN or agreed GREEN-before/after evidence.
-- For implementation, include the initial design mapping or reference, assessment dispositions/rationale, significant design refinements, needed document synchronization and behavior-preservation limits. Confirm final-state checks cover selected changes; earlier GREEN alone does not validate a later refactor.
-- Runtime/resource/CI limits, unresolved items and concrete follow-up prerequisites.
-- Required pending documentation, independent review, full handoff or other downstream responsibilities, with their effect on overall task readiness.
-
-Use **passed**, **failed**, **blocked/not run**, and **not applicable** with reasons. Core implementation completion requires requested implementation criteria, completed design assessment and applicable mandatory checks to pass on the final state, with implementation-critical artifacts consistent. Verification-only work reports requested checks and actual outcomes without adding assessment/checkpoints. Deferred findings that prevent implementation criteria remain blockers. Documentation synchronization, comprehensive review and full handoff are downstream candidates; do not automatically execute them or claim overall task/MR completion while required downstream work remains. Preserve and report useful partial work honestly when core conditions are not met.
+Report per [SKILL.md section 5](../SKILL.md#5-return-the-core-execution-result), using **passed**, **failed**, **blocked/not run** and **not applicable** with reasons, and actual commands, working directories and outcomes without secrets. Confirm final-state checks cover selected changes; an earlier GREEN alone does not validate a later refactor. Preserve and report useful partial work honestly when core conditions are not met.

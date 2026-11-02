@@ -1,6 +1,6 @@
 # Local test checkpoints and GREEN continuation
 
-This reference owns test-path selection, checkpoints and commit granularity. Features and bug fixes start with local RED → RED commit → implementation → verified GREEN commit. Every implementation task/slice also requires [design assessment](design-assessment.md); selected work may add RED/GREEN or GREEN-before/after checkpoints below. Pipeline means local tests/checks; remote CI is not the checkpoint runner.
+This reference owns test-path selection, checkpoints and commit granularity. Features and bug fixes start with local RED → RED commit → implementation → verified GREEN commit. Every implementation task/slice also requires [design assessment](design-assessment.md); selected work may add RED/GREEN or GREEN-before/after checkpoints below.
 
 ## Phase boundaries and commit contents
 
@@ -21,25 +21,20 @@ Every phase commit also requires the [phase commit message gate](git-documentati
 
 ## User-supplied ticket gate
 
-A ticket ID is mandatory before entering change design (scope point 3) or task implementation (scope point 4), including RED or characterization tests for that implementation. These points refer to the agreed scope responsibilities, not the internal section numbers in the workflow reference.
-
-Use the ID explicitly supplied by the user, including unambiguous supplied references or earlier conversation. Ask only if it is missing or ambiguous. Do not infer it solely from repository history, generate placeholders or use absent-ticket fallbacks.
-
-Context gathering/setup alone and verification-only execution (scope point 5) do not trigger the ticket gate. A sufficient supplied reference skips optional analysis/design, but implementation still requires the ticket ID.
+Owned by [SKILL.md section 2](../SKILL.md#2-apply-the-ticket-and-context-gates); it covers RED and characterization tests. Context gathering/setup and verification-only execution do not trigger it, and a sufficient supplied reference skips optional analysis/design but not the ticket.
 
 ## Feature and bug-fix ordering
 
-1. Establish the intended scenario and agreed pipeline/check scope from the task context. Preserve the applicable contract and existing tests.
-2. Write the RED test and only the minimum executable scaffolding needed to run it. Run the relevant local test/check pipeline and observe failure caused by the missing behavior or regression being addressed.
-3. Record the exact command/runner, working directory, scenario and observed reason. Apply the phase-boundary and message checks above and commit the RED checkpoint once. Verify and record its actual subject and SHA before writing GREEN behavior.
-4. Implement the required behavior after the RED checkpoint. Preserve meaningful assertions; do not weaken or disable the test merely to pass.
-5. Run the same relevant pipeline/scenario to demonstrate GREEN, plus applicable mandatory checks. Fix in-scope failures and report actual outcomes and remaining limitations.
-6. Apply the staging and message checks above and commit the verified implementation once using the same resolved convention. Verify and record its actual subject, SHA and the RED → GREEN relationship.
-7. Assess the GREEN implementation using [design-assessment.md](design-assessment.md). Classify selected changes below before further production edits; verify their final state and reassess the diff before declaring core completion.
+Follow the RED → GREEN steps in [SKILL.md section 3](../SKILL.md#3-execute-the-local-test-checkpoint-protocol). The rules below are specific to this reference:
+
+- Before RED, establish the intended scenario and agreed check scope, preserving the applicable contract and existing tests.
+- Record the exact command/runner, working directory, scenario and observed reason for RED; verify and record the actual subject and SHA before writing GREEN behavior.
+- Preserve meaningful assertions; do not weaken or disable the test merely to pass.
+- Record the RED → GREEN relationship with the GREEN SHA and subject. After GREEN, assess under [design-assessment.md](design-assessment.md) and classify selected changes below before further production edits; verify their final state and reassess the diff before declaring core completion.
 
 An unexpected toolchain, syntax, credential or resource failure is not valid behavioral RED. A pipeline that was not executed is not RED evidence. Expected RED is an intermediate checkpoint, not permission to report the implementation complete with failing checks.
 
-Initial and assessment-selected phase commits belong to core implementation. Push, remote CI, MR/PR creation and deployment still require separately requested scope. A pure-refactor GREEN test checkpoint is distinct from its GREEN implementation commit.
+Initial and assessment-selected phase commits belong to core implementation; push, MR/PR creation and deployment still require separately requested scope. A pure-refactor GREEN test checkpoint is distinct from its GREEN implementation commit.
 
 ## Assessment-selected work
 
@@ -60,11 +55,7 @@ An existing verified GREEN implementation commit can serve as the next restructu
 
 ## Local pipeline meaning
 
-Pipeline means the relevant local test/check commands selected from the target's actual tooling and task context. Run the specific edited test first; its observed intended failure establishes the RED scenario. Record the exact command, working directory and failure reason before the checkpoint commit.
-
-After implementation, rerun the same relevant local scenario/checks to establish GREEN, then complete the applicable unit suite, lint and security checks under [verification.md](verification.md). Adapt commands to the target; there is no prescribed Makefile or remote pipeline.
-
-Record these as local results. Do not require commit/push or remote CI to obtain RED, claim that local success proves remote CI, or publish a branch merely to run the checkpoint protocol. Remote CI follows a separate explicit request.
+Pipeline = local tests/checks selected from the target's actual tooling; remote CI is a separate request. Run the specific edited test first; its observed intended failure establishes the RED scenario. After implementation, rerun the same scenario, then the applicable unit suite, lint and security checks under [verification.md](verification.md). Do not publish a branch or require commit/push to obtain RED, or claim local success proves remote CI.
 
 ## Agreed pure-refactor exception
 
@@ -83,4 +74,4 @@ A verification-only request reports existing check outcomes; it does not invent 
 
 ## Core evidence
 
-Include the supplied ticket ID when required, each phase's SHA/actual commit subject and local command/results. For each RED/GREEN unit include the observed RED reason, necessary non-test scaffolding and subsequent GREEN. For existing-contract restructuring include why the exception applies, pre-refactor GREEN, characterization coverage and post-refactor GREEN. Include assessment findings/dispositions, selected paths and final behavior-preservation limits. Mandatory check failures leave verification incomplete even when scenario tests pass. Source review, an intended command or a commit message alone is not proof of a pipeline result.
+Report per [SKILL.md section 5](../SKILL.md#5-return-the-core-execution-result). For existing-contract restructuring also include why the exception applies, pre-refactor GREEN, characterization coverage and post-refactor GREEN. Mandatory check failures leave verification incomplete even when scenario tests pass. Source review, an intended command or a commit message alone is not proof of a pipeline result.

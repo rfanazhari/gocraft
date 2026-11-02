@@ -53,7 +53,7 @@ Report findings as **refactored**, **retained with rationale**, or **deferred wi
 
 ## Classify and execute the selected work
 
-Use the [assessment-selected work paths](red-green.md#assessment-selected-work) before production edits. A refactor introducing a new internal contract can contain a RED/GREEN cycle while preserving existing product behavior. A restructuring behind an existing contract uses the agreed GREEN-checkpoint exception. New product behavior or a bug fix needs its own appropriately scoped RED path.
+Classify each selected change using the [assessment-selected work paths](red-green.md#assessment-selected-work) before production edits.
 
 Make small, coherent changes from a passing baseline and run affected tests after each step. Add characterization coverage before restructuring when existing coverage is insufficient. If a step fails, diagnose it; repair or undo only that step while preserving user work. Keep the two-unexplained-failures stop rule and meaningful assertions from [testing.md](testing.md).
 
