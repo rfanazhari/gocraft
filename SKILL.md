@@ -5,18 +5,18 @@ description: Implement and test changes in existing Go projects. Use for feature
 
 # Gocraft — implement and verify Go tasks
 
-Implement the requested change and establish its local test/check results using the bundled standards. Support general Go modules, services and workspaces without depending on the originating repository, a fixed layout, Bazel/Gazelle, a particular Git host or companion skills.
+Implement the requested change and establish its local test/check results using the bundled standards. Support general Go modules, services and workspaces; assume no fixed layout, Bazel/Gazelle, hosting provider or companion skills.
 
-Resolve reference links relative to this file. The [reference index](references/README.md) lists topic ownership; load only topics triggered by the change. Do NOT read README.md, references/README.md, references/sources.md, references/validation.md or docs/ during task execution (maintainer files).
+Resolve reference links relative to this file; load only topics triggered by the change. Do NOT read README.md, references/README.md, references/sources.md, references/validation.md or docs/ during task execution (maintainer files).
 
 ## 1. Select the execution path
 
-Read [scope-routing.md](references/scope-routing.md) and the supplied task/reference documents. Use sufficient existing context directly; do not repeat analysis, workspace setup or design merely because the skill starts.
+Read [scope-routing.md](references/scope-routing.md) and the supplied task/reference documents. Use sufficient existing context directly; do not repeat analysis, setup or design.
 
 - **Implementation:** use the accepted requirements, contracts, plan and prepared workspace. Recover only material gaps using [requirements.md](references/requirements.md) and the conditional branches in [workflow.md](references/workflow.md).
 - **Verification only:** run the requested relevant checks using [verification.md](references/verification.md). Do not invent implementation work, a ticket requirement or a RED commit. If a fix is needed, report it; entering design/implementation triggers the gate below.
 
-Explicit user directions govern the work. Read applicable target instructions, inspect the actual workspace/existing changes, and read affected code before mutation. Preserve user work; prepare a branch/worktree only when needed or required by target instructions/request.
+Explicit user directions govern the work; apply the minimum execution checks in scope-routing.md and preserve user work.
 
 ## 2. Apply the ticket and context gates
 
@@ -41,7 +41,7 @@ Use clientmanager for outbound HTTP and logmanager for logging; prefer httpmanag
 
 For implementation, read [testing.md](references/testing.md), [red-green.md](references/red-green.md), and the mandatory [phase commit message gate](references/commit-gate.md#phase-commit-message-gate). For the base convention, create every checkpoint through [scripts/phase_commit.py](scripts/phase_commit.py) with `--commit`; it validates type, supplied ticket, Git author, phase and description before invoking Git, then verifies the actual subject. For an explicitly required target convention, use the documented validator path in the gate. Task-plan examples and Git history are evidence, not message-format overrides. Use the gate for both feature/fix and pure-refactor paths.
 
-**Refactor task:** establish an existing GREEN baseline, assess the proposed changes and select the path in [red-green.md](references/red-green.md#assessment-selected-work). A new internal contract requires meaningful RED/GREEN with regression checks during integration; restructuring behind existing contracts uses the agreed GREEN test checkpoint → refactor → verified GREEN exception. Fill characterization gaps first and preserve existing product behavior. The exception needs no repeated approval; never manufacture failure.
+**Refactor task:** establish an existing GREEN baseline, assess the proposed changes and select the path in [red-green.md](references/red-green.md#assessment-selected-work). A new internal contract needs meaningful RED/GREEN; restructuring behind existing contracts uses the agreed GREEN-checkpoint exception. Fill characterization gaps first and preserve existing product behavior; never manufacture failure.
 
 **Feature or bug fix:** follow the RED path below.
 
@@ -58,13 +58,13 @@ Read whole test files before editing when small (about 300 lines or fewer), othe
 
 ## 4. Assess after GREEN and resolve findings
 
-For implementation, before core completion, follow [design-assessment.md](references/design-assessment.md): assess the actual design once per task/slice, record justified findings, and perform beneficial in-scope changes. Retaining the design with a short rationale is valid. Classify selected work before editing: new internal contracts return to RED/GREEN; existing-contract restructuring stays GREEN before/after; new product behavior or bug fixes require an appropriately scoped RED path.
+For implementation, before core completion, follow [design-assessment.md](references/design-assessment.md): assess the actual design once per task/slice, record justified findings, and perform beneficial in-scope changes. Retaining the design with a short rationale is valid.
 
-Apply [red-green.md](references/red-green.md) to the resulting checkpoints/commits, including separate verified refactor work when present. Reassess the final diff and rerun affected checks. No empty commits or forced patterns are required.
+Classify and checkpoint selected work under [red-green.md](references/red-green.md#assessment-selected-work), reassess the final diff and rerun affected checks.
 
 ## 5. Return the core execution result
 
-Inspect own changes sufficiently to verify behavior and preserve scope. Core implementation completion requires requested implementation criteria, completed design assessment, consistent implementation-critical artifacts and passing applicable mandatory local checks on the final state. Verification-only work reports requested checks without adding assessment or phase commits. HTTP runtime evidence is conditional on the change context; mocks do not establish real SQL/broker/HTTP behavior.
+Inspect own changes sufficiently to verify behavior and preserve scope. Core implementation completion requires requested implementation criteria, completed design assessment, consistent implementation-critical artifacts and passing applicable mandatory local checks on the final state. Verification-only work reports requested checks without adding assessment or phase commits. Mocks do not establish real SQL/broker/HTTP behavior.
 
 Briefly report the implemented change, affected code/artifacts, ticket ID when required, each phase's SHA/actual commit subject and local check results. For each unit, include the RED reason and necessary non-test scaffolding, or the agreed exception and pre/post GREEN evidence, plus blockers and pending downstream obligations. Distinguish passed, failed, blocked/not run and not applicable.
 
