@@ -63,7 +63,7 @@ Complete when dependent implementation needs no hidden behavior, compatibility o
 
 Dependency: sufficient supplied context or resolved gaps; an appropriate workspace and applicable contracts are available. Do not require the optional recovery stages when these conditions are already met.
 
-Entering implementation requires the supplied ticket ID even with complete context. Use [red-green.md](red-green.md) for initial and assessment-selected test paths and local phase commits. Remote CI is not required.
+Entering implementation requires the supplied ticket ID even with complete context. Use [red-green.md](red-green.md) for initial and assessment-selected test paths and local phase commits.
 
 - Read related files and apply the Go, architecture, API/error and active-component standards.
 - Before code, briefly confirm the design mapping under [design-assessment.md](design-assessment.md), reusing supplied decisions and resolving only material conflicts/gaps.
@@ -80,16 +80,7 @@ Complete when the slice passes its criteria, assessment is complete, selected ch
 
 ## 6. Downstream candidates: documentation, comprehensive review and handoff
 
-Boundary: these responsibilities are candidates for subskills and are not an obligatory core phase. Exact names/split and invocation remain undecided; no subskill is created here. Required implementation artifacts remain in section 5.
-
-- **Conditional behavior change:** update the owning business/requirements documentation, status and known gaps using [git-docs-downstream.md](git-docs-downstream.md).
-- **Conditional contract change:** align endpoint documents, index, specifications in use and API changelog.
-- **Conditional documentation:** synchronize schema/usage/environment documentation with the implemented change.
-- Perform a separate comprehensive diff review and full handoff when requested/routed through the future subskill design. Record any required downstream work without automatically invoking an unavailable skill.
-
-Core boundary output: pending documentation/review/handoff obligations and the facts a downstream subskill needs.
-
-Downstream completion criteria apply only when that responsibility is undertaken. Required documentation/review obligations remain part of overall task readiness; separating them from the core does not waive them. Pure refactors do not invent business-rule or contract changes.
+Not a core phase; the downstream boundary is summarized in [SKILL.md](../SKILL.md) section 5 and the conventions live in [git-docs-downstream.md](git-docs-downstream.md). Required implementation artifacts remain in section 5. Conditional contract documentation follows [api-errors.md](api-errors.md). Record pending documentation/review/handoff obligations for the result; do not invoke an unavailable skill. Pure refactors do not invent business-rule or contract changes.
 
 ## 7. Core: test and verify the implementation
 
@@ -104,15 +95,8 @@ For a verification-only request, execute the requested checks directly without a
 
 Output: implementation criterion/check results, own-change verification and explicit limitations/pending downstream obligations.
 
-Core implementation is complete when requested implementation criteria and applicable mandatory checks pass on the final state, design assessment is complete, and conditional checks have evidence or valid not-applicable reasons. Verification-only work reports requested checks and actual outcomes without adding assessment/checkpoints. Existing failures and blocked checks remain visible; pending downstream obligations prevent an unqualified claim of overall task/MR completion.
+Completion criteria are owned by [SKILL.md section 5](../SKILL.md#5-return-the-core-execution-result); conditional checks need evidence or a valid not-applicable reason, and existing failures and blocked checks remain visible.
 
 ## 8. Core result and downstream boundary
 
-Dependency: core implementation/verification results, including partial results if blocked.
-
-- Return a brief execution result: implemented change, affected code/artifacts, checks/outcomes, blockers and required downstream work. This is not the full handoff subskill.
-- Documentation synchronization, comprehensive review, full handoff and additional authorized Git lifecycle work follow the future subskill design or an explicit broader request. The local phase commits stay in core implementation; other Git actions require their own requested scope.
-
-Output: concise, truthful core result, checkpoint evidence/SHA when applicable and any pending downstream obligations; no additional Git artifacts beyond the requested scope.
-
-Complete when core results and limits are explicit. Distinguish core completion from documentation, independent review, full handoff, CI, release and deployment status.
+Return the brief result defined in [SKILL.md section 5](../SKILL.md#5-return-the-core-execution-result), including partial results if blocked, blockers and required downstream work. It is not the full handoff subskill. Documentation synchronization, comprehensive review, full handoff and other Git lifecycle work follow [git-docs-downstream.md](git-docs-downstream.md) or an explicit broader request; local phase commits stay in core.
