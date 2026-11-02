@@ -51,7 +51,7 @@ Complete when each planned change has a criterion or direct prerequisite and eac
 Trigger: an active change lacks a required API/data/upstream/event/dependency decision. A sufficient supplied decision is used directly rather than redesigned.
 
 - **Conditional API:** establish or update the contract and compatibility before the handler, using [api-errors.md](api-errors.md). A fix may restore an unchanged contract; a pure refactor preserves it.
-- **Conditional persistence:** settle schema/query/transaction changes, required reference/seed data, existing-data handling and rollback consequences using [persistence.md](persistence.md).
+- **Conditional persistence:** settle schema/query/transaction changes, required reference/seed data, existing-data handling and rollback consequences using [persistence.md](persistence.md), [persistence-migrations.md](persistence-migrations.md) and [persistence-seeders.md](persistence-seeders.md) as applicable.
 - **Conditional upstream/event:** settle port, payload, failure, side-effect and lifecycle semantics using [integrations-events.md](integrations-events.md).
 - **Conditional dependency:** verify effective versions and APIs using [libraries.md](libraries.md) before adopting an integration or example.
 

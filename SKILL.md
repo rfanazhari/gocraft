@@ -31,7 +31,7 @@ Read the applicable branch before dependent code:
 | Trigger | Reference and decision |
 | --- | --- |
 | Endpoint, transport or error/localization change | [api-errors.md](references/api-errors.md): contract before handler, compatibility, envelope and safe error mapping. |
-| Query, transaction, schema, stored data, initial/reference data or seeder | [persistence.md](references/persistence.md): SQL, migrations, seed datasets, constraints and data/rollback semantics. |
+| Query, transaction, schema, stored data, initial/reference data or seeder | [persistence.md](references/persistence.md): SQL, schema conventions, evidence. Add [persistence-migrations.md](references/persistence-migrations.md) for schema/versioned-data migrations and [persistence-seeders.md](references/persistence-seeders.md) for reference/initial data or a seeder. |
 | Upstream call or event change | [integrations-events.md](references/integrations-events.md): contracts, failure/side-effect semantics and lifecycle. |
 | Dependency API used or changed | [libraries.md](references/libraries.md): verify the effective target version and actual API before adopting an example/integration. |
 
