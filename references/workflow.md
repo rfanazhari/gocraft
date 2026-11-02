@@ -72,7 +72,7 @@ Entering implementation requires the supplied ticket ID even with complete conte
 - Implement the minimum behavior, real wiring, context propagation and safe error handling. Regenerate mocks when a tested interface changes.
 - Include implementation-critical migration/schema, required reference/seed data and loaders, error/translation, dependency, generated-code and configuration artifacts required by the requested change; broader documentation synchronization belongs to the downstream boundary below.
 - Keep nearby legacy edits limited to what the task needs. After test edits, run the specific test, then the unit suite when green.
-- After the verified GREEN checkpoint, complete [design-assessment.md](design-assessment.md) once per task/slice. Perform justified selected work using its applicable checkpoints, then reassess the final diff. Record retained/deferred findings with reasons; no-change outcomes require no extra commit.
+- After the verified GREEN checkpoint, complete [design-assessment-after-green.md](design-assessment-after-green.md) once per task/slice. Perform justified selected work using its applicable checkpoints, then reassess the final diff. Record retained/deferred findings with reasons; no-change outcomes require no extra commit.
 
 Output: scoped code/tests and technical artifacts, ticket ID, all applicable checkpoint subjects/SHAs and local results, design mapping and assessment dispositions. Include RED reasons or the GREEN-before/after exception evidence for each selected path.
 

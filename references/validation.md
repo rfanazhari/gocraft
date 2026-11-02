@@ -16,7 +16,7 @@ These checks exercise the real Git command path. They do not establish that a fu
 
 ## Design-assessment update checks — 2026-10-29
 
-The approved workflow adds [design-assessment.md](design-assessment.md) and distinguishes assessment-selected new internal contracts from existing-contract restructuring in [red-green.md](red-green.md#assessment-selected-work). Workflow, completion, navigation, commit and encapsulation guidance were reviewed together; historical hypothesis/provenance notes identify the superseding decisions.
+The approved workflow adds [design-assessment.md](design-assessment.md) (plus [design-assessment-after-green.md](design-assessment-after-green.md)) and distinguishes assessment-selected new internal contracts from existing-contract restructuring in [red-green-refactor.md](red-green-refactor.md#assessment-selected-work). Workflow, completion, navigation, commit and encapsulation guidance were reviewed together; historical hypothesis/provenance notes identify the superseding decisions.
 
 The bundled `quick_validate.py` passed using Python 3.11 with PyYAML. Package checks passed for all 19 operational/overview Markdown files: local links and heading fragments, containment, navigation reachability from SKILL.md, balanced fences, whitespace, final newlines and the 150-line topic limit for SKILL.md/references. An isolated copy of SKILL.md, README.md and references passed the same checks, with matching file hashes. `git diff --check` passed. These are documentation changes; no target Go tests, lint, security or runtime checks were executed or claimed.
 

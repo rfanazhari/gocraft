@@ -21,7 +21,7 @@ Integration checks are appropriate only where mocks cannot establish the behavio
 | Refactor introducing a new internal contract | Establish existing-behavior GREEN and specify the new contract | Contract tests as intended RED, then implementation/integration as GREEN. |
 | Existing-contract restructuring | Establish GREEN; add passing characterization tests first if coverage is insufficient | GREEN test checkpoint, refactor, GREEN again; record why RED does not apply. |
 
-Checkpoints, classification and scaffolding rules: [red-green.md](red-green.md#assessment-selected-work). Existing passing unit tests can protect restructuring when coverage is sufficient; otherwise add characterization tests before production changes. Design assessment applies to every implementation task/slice per [design-assessment.md](design-assessment.md); retaining the design needs a rationale, not manufactured tests or commits.
+Checkpoints, classification and scaffolding rules: [red-green-refactor.md](red-green-refactor.md#assessment-selected-work). Existing passing unit tests can protect restructuring when coverage is sufficient; otherwise add characterization tests before production changes. Design assessment applies to every implementation task/slice per [design-assessment.md](design-assessment.md); retaining the design needs a rationale, not manufactured tests or commits.
 
 Behavioral RED must reflect the intended missing behavior/bug, not a syntax error, incorrect fixture or unavailable tool/resource. Record the relevant before/after commands/results; do not claim historical RED that was never observed.
 

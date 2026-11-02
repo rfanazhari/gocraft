@@ -176,6 +176,7 @@ gocraft/
     ├── go-standards.md
     ├── architecture.md
     ├── design-assessment.md
+    ├── design-assessment-after-green.md
     ├── api-errors.md
     ├── persistence.md
     ├── persistence-migrations.md
@@ -184,6 +185,7 @@ gocraft/
     ├── libraries.md
     ├── testing.md
     ├── red-green.md
+    ├── red-green-refactor.md
     ├── verification.md
     ├── verification-extended.md
     ├── commit-gate.md
@@ -203,7 +205,8 @@ Agents load these on demand, not all at once. The full index with ownership and 
 | [requirements.md](references/requirements.md) | Reading supplied context or recovering a specific gap |
 | [go-standards.md](references/go-standards.md) | Before designing or editing Go |
 | [architecture.md](references/architecture.md) | Mapping changes to packages |
-| [design-assessment.md](references/design-assessment.md) | Every implementation task/slice: before code, after GREEN and before completion |
+| [design-assessment.md](references/design-assessment.md) | Before code for every implementation task/slice |
+| [design-assessment-after-green.md](references/design-assessment-after-green.md) | After GREEN, and at the start of a refactor task |
 | [api-errors.md](references/api-errors.md) | HTTP/gRPC behavior, handlers, errors, localization |
 | [persistence.md](references/persistence.md) | Queries, repositories, transactions, schema, stored data |
 | [persistence-migrations.md](references/persistence-migrations.md) | Schema change or versioned data migration |
@@ -211,7 +214,8 @@ Agents load these on demand, not all at once. The full index with ownership and 
 | [integrations-events.md](references/integrations-events.md) | Upstream calls or events |
 | [libraries.md](references/libraries.md) | Selecting or using a dependency API |
 | [testing.md](references/testing.md) | Before adding/editing tests |
-| [red-green.md](references/red-green.md) | Before design/implementation and its checkpoint |
+| [red-green.md](references/red-green.md) | Before the first test and its checkpoint |
+| [red-green-refactor.md](references/red-green-refactor.md) | After GREEN when assessment selects work; refactor tasks |
 | [verification.md](references/verification.md) | Planning evidence or accepting results |
 | [verification-extended.md](references/verification-extended.md) | HTTP/real-resource evidence or a blocked/failing check |
 | [commit-gate.md](references/commit-gate.md) | Before every phase commit |

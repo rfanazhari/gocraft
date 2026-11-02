@@ -7,7 +7,16 @@ description: Implement and test changes in existing Go projects. Use for feature
 
 Implement the requested change and establish its local test/check results using the bundled standards. Support general Go modules, services and workspaces; assume no fixed layout, Bazel/Gazelle, hosting provider or companion skills.
 
-Resolve reference links relative to this file; load only topics triggered by the change. Do NOT read README.md, references/README.md, references/sources.md, references/validation.md or docs/ during task execution (maintainer files).
+Resolve reference links relative to this file; load only topics triggered by the change, just in time, and do not preload. Do NOT read README.md, references/README.md, references/sources.md, references/validation.md or docs/ during task execution (maintainer files).
+
+| Stage | Read then |
+| --- | --- |
+| Start | scope-routing.md |
+| Before the first test or Go edit | go-standards.md, testing.md, red-green.md |
+| Before code | design-assessment.md; trigger-table branches below |
+| Immediately before the first checkpoint commit | commit-gate.md |
+| Running required checks | verification.md |
+| After GREEN, or at the start of a refactor task | design-assessment-after-green.md, red-green-refactor.md |
 
 ## 1. Select the execution path
 
@@ -24,7 +33,7 @@ A ticket ID explicitly supplied by the user is mandatory before change design or
 
 Read [go-standards.md](references/go-standards.md) before changing Go. Read [architecture.md](references/architecture.md) only when adding/moving packages or layers or mapping responsibilities for new code; preserve existing valid layout and task scope.
 
-For every implementation task/slice, read [design-assessment.md](references/design-assessment.md). Before code, briefly confirm invariant ownership, affected responsibilities and preserved contracts using the supplied design and actual code. Reuse existing mappings; resolve material conflicts without restarting a full design phase.
+For every implementation task/slice, read [design-assessment.md](references/design-assessment.md) before code and briefly confirm invariant ownership, affected responsibilities and preserved contracts using the supplied design and actual code. Reuse existing mappings; resolve material conflicts without restarting a full design phase.
 
 Read the applicable branch before dependent code:
 
@@ -39,9 +48,9 @@ Use clientmanager for outbound HTTP and logmanager for logging; prefer httpmanag
 
 ## 3. Execute the local test-checkpoint protocol
 
-For implementation, read [testing.md](references/testing.md), [red-green.md](references/red-green.md), and the mandatory [phase commit message gate](references/commit-gate.md#phase-commit-message-gate). For the base convention, create every checkpoint through [scripts/phase_commit.py](scripts/phase_commit.py) with `--commit`; it validates type, supplied ticket, Git author, phase and description before invoking Git, then verifies the actual subject. For an explicitly required target convention, use the documented validator path in the gate. Task-plan examples and Git history are evidence, not message-format overrides. Use the gate for both feature/fix and pure-refactor paths.
+For implementation, read [testing.md](references/testing.md) and [red-green.md](references/red-green.md) before the first test, and the mandatory [phase commit message gate](references/commit-gate.md#phase-commit-message-gate) immediately before the first checkpoint commit (keep its resolved convention for later phases). For the base convention, create every checkpoint through [scripts/phase_commit.py](scripts/phase_commit.py) with `--commit`; it validates type, supplied ticket, Git author, phase and description before invoking Git, then verifies the actual subject. For an explicitly required target convention, use the documented validator path in the gate. Task-plan examples and Git history are evidence, not message-format overrides. Use the gate for both feature/fix and pure-refactor paths.
 
-**Refactor task:** establish an existing GREEN baseline, assess the proposed changes and select the path in [red-green.md](references/red-green.md#assessment-selected-work). A new internal contract needs meaningful RED/GREEN; restructuring behind existing contracts uses the agreed GREEN-checkpoint exception. Fill characterization gaps first and preserve existing product behavior; never manufacture failure.
+**Refactor task:** read [red-green-refactor.md](references/red-green-refactor.md) and [design-assessment-after-green.md](references/design-assessment-after-green.md) first; establish an existing GREEN baseline, assess the proposed changes and select the path in [red-green-refactor.md](references/red-green-refactor.md#assessment-selected-work). A new internal contract needs meaningful RED/GREEN; restructuring behind existing contracts uses the agreed GREEN-checkpoint exception. Fill characterization gaps first and preserve existing product behavior; never manufacture failure.
 
 **Feature or bug fix:** follow the RED path below.
 
@@ -58,9 +67,9 @@ Read whole test files before editing when small (about 300 lines or fewer), othe
 
 ## 4. Assess after GREEN and resolve findings
 
-For implementation, before core completion, follow [design-assessment.md](references/design-assessment.md): assess the actual design once per task/slice, record justified findings, and perform beneficial in-scope changes. Retaining the design with a short rationale is valid.
+For implementation, before core completion, follow [design-assessment-after-green.md](references/design-assessment-after-green.md): assess the actual design once per task/slice, record justified findings, and perform beneficial in-scope changes. Retaining the design with a short rationale is valid.
 
-Classify and checkpoint selected work under [red-green.md](references/red-green.md#assessment-selected-work), reassess the final diff and rerun affected checks.
+Classify and checkpoint selected work under [red-green.md](references/red-green-refactor.md#assessment-selected-work), reassess the final diff and rerun affected checks.
 
 ## 5. Return the core execution result
 
