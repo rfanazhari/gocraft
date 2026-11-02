@@ -63,3 +63,4 @@ temp/
 .cursor/plans/
 .cursor/**/agent-transcripts/
 .cursor/**/terminals/
+.claude/
