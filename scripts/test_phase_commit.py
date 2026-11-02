@@ -72,6 +72,16 @@ class PhaseCommitTest(unittest.TestCase):
         self.assertIn(self.git("rev-parse", "HEAD"), result.stdout)
         self.assertEqual(self.git("diff", "--cached", "--name-only"), "")
 
+    def test_rejection_points_to_the_commit_gate(self):
+        result = self.run_gate("TASK-123 GREEN: bad", "GREEN", "feat")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("commit-gate.md", result.stderr)
+
+    def test_commit_prints_next_step_for_the_phase(self):
+        result = self.run_gate(commit=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("then commit GREEN", result.stdout)
+
     def test_green_types_and_red_type_gate(self):
         for kind in ("test", "feat", "fix", "refactor"):
             with self.subTest(kind=kind):

@@ -2,8 +2,19 @@
 """Validate a base-convention checkpoint; optionally commit the staged snapshot."""
 
 import argparse
+import os
 import subprocess
 import sys
+
+REFS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "references")
+FORMAT_HINT = ("Format: <type>: [<ticket>][<author>] <RED|GREEN> <lowercase imperative description>. "
+               f"Rules: {os.path.join(REFS, 'commit-gate.md')}")
+NEXT_STEP = {
+    "RED": "Next: implement the minimum behavior, rerun the same scenario, then commit GREEN.",
+    "GREEN": ("Next: read " + os.path.join(REFS, "design-assessment-after-green.md") +
+              " and assess the design (and red-green-refactor.md if work is selected) "
+              "before declaring core completion."),
+}
 
 
 def git(repo, *args):
@@ -59,6 +70,7 @@ def main():
             if actual != args.subject:
                 raise ValueError("a hook changed the validated subject")
             print("Checkpoint message verified.")
+            print(NEXT_STEP[args.phase])
         else:
             print(f"Valid subject: {args.subject}")
         return 0
@@ -66,6 +78,8 @@ def main():
         detail = (exc.stderr.strip() or "Git command failed; check repository and user.name"
                   if isinstance(exc, subprocess.CalledProcessError) else str(exc))
         print(f"Checkpoint rejected: {detail}", file=sys.stderr)
+        if not committed:
+            print(FORMAT_HINT, file=sys.stderr)
         if committed:
             print("A commit was created; stop and report it. History was not rewritten.",
                   file=sys.stderr)
