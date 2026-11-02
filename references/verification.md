@@ -28,6 +28,8 @@ Use `go test` to verify code, never `go build`, `go run`, an image build or an u
 
 Read the target's scripts, Makefile, lint/security settings, CI, module/workspace and test-tag conventions. A Makefile or specific target name is not required by this package.
 
+**Keep command output small.** Run the specific test first with `-run`, request concise output (for example pipe to `tail -40`, or filter `-json`; use `golangci-lint run` default concise format), and surface only failures and summary lines in reasoning and reports. Rerun with more detail only when diagnosing. This does not hide failures or change pass/fail criteria.
+
 Illustrative shapes, selected and adapted to actual package paths:
 
 ```sh

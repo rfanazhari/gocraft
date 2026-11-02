@@ -27,7 +27,7 @@ Behavioral RED must reflect the intended missing behavior/bug, not a syntax erro
 
 ## Before editing any test file
 
-1. Read the entire file.
+1. Read the whole file when it is small (about 300 lines or fewer); for larger files read the test table being edited, factory signatures, imports and the mock interfaces it uses.
 2. Identify the exact test-table field names and order.
 3. Read factory signatures and the public operation under test, plus relevant mock interfaces.
 4. Use exact replacement or full-block rewriting for Go edits. Regex shell editing, including `sed`/`awk`, is not allowed.
@@ -43,7 +43,7 @@ Behavioral RED must reflect the intended missing behavior/bug, not a syntax erro
 - Use `assert.ErrorIs(t, err, expectedErr)` for specific errors; use `require.Error` when error presence is a prerequisite.
 - Compare equality with equality assertions, not `assert.True(t, a == b)`.
 
-When adding/updating cases, rewrite the entire table block. Preserve existing cases unless removal was explicitly requested, preserve field order, and keep trailing commas after final field values and entries.
+When adding/updating cases, use exact replacement or insertion of only the changed entries. Preserve existing cases unless removal was explicitly requested, preserve field order, and keep trailing commas after final field values and entries.
 
 ## Objects, fixtures and mocks
 

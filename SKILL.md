@@ -54,7 +54,7 @@ For implementation, read [testing.md](references/testing.md), [red-green.md](ref
 
 The pipeline is local. One commit per completed phase is core execution under [red-green.md](references/red-green.md), unless the user explicitly requests a different Git scope. Push, remote CI, MR/PR creation and deployment require separate requested scope.
 
-Read entire test files before editing; use public table-driven tests, appropriate fixtures and Mockery-generated mocks. Stop speculative changes after two unexpected failures without a clear cause, report evidence, and continue only independent work.
+Read whole test files before editing when small (about 300 lines or fewer), otherwise the table, factories, imports and mocks involved; use public table-driven tests, appropriate fixtures and Mockery-generated mocks. Stop speculative changes after two unexpected failures without a clear cause, report evidence, and continue only independent work.
 
 ## 4. Assess after GREEN and resolve findings
 
