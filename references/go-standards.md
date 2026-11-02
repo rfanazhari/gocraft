@@ -36,7 +36,7 @@ Apply these rules to new/changed code in the task. Keep unrelated legacy cleanup
 - Generated `*_mock.go` files are excluded from lint according to the target configuration; do not use exclusions to conceal failures in handwritten code.
 - Edit Go through complete-block rewrites or exact replacement. Regex-based shell editing, including `sed`/`awk` edits, is not permitted for Go source.
 - Verify code with `go test`, not `go build` or `go run`.
-- Keep Markdown focused on one topic and around 150 lines or fewer. Use an index and focused references when it grows; business-documentation limits are in [git-documentation.md](git-documentation.md).
+- Keep Markdown focused on one topic and around 150 lines or fewer. Use an index and focused references when it grows; business-documentation limits are in [git-docs-downstream.md](git-docs-downstream.md).
 
 ## Configuration and resource ownership
 

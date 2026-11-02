@@ -33,26 +33,4 @@ Include artifacts that the requested implementation needs to function and pass v
 
 New or changed contracts must be settled before their handlers. Use a sufficient supplied contract directly; recover a missing one before dependent implementation. Formal synchronization of broader documentation can be handed to a downstream subskill.
 
-## Downstream subskill candidates
-
-The former completion/documentation stage is separated from the core boundary. Possible responsibilities, without fixing the number or names of subskills yet:
-
-| Responsibility | Information available from core execution |
-| --- | --- |
-| Documentation synchronization | Implemented behavior, accepted contracts/rules, changed artifacts and known gaps; update API/business/schema/usage documentation as required. |
-| Comprehensive diff review | Scope, base/workspace when available, changed files and test results; perform the separate structured review. |
-| Full handoff and additional authorized Git actions | Implementation and verification results, test-checkpoint SHA/evidence, limitations, pending obligations and requested Git scope; the local phase commits stay in core. |
-
-These subskills are not created or automatically invoked by this reference package. Explicit requests may include these responsibilities later; route them through the agreed subskill design instead of silently treating all of them as core phases.
-
-The core includes mandatory design assessment and justified in-scope refactoring under [design-assessment.md](design-assessment.md), as well as checking its own edits to verify behavior and preserve scope. This assessment is distinct from a separate comprehensive diff review. Record refinements to supplied designs and identify needed document synchronization for subsequent tasks; broader synchronization retains its requested scope.
-
-## Core output and completion
-
-Return a brief execution result: implemented change, affected code/artifacts, checks and outcomes, blockers and any required downstream work. Producing a truthful result does not require the full handoff subskill.
-
-For implementation, include the supplied ticket ID, each applicable phase's type/actual subject/SHA and local check outcomes under [red-green.md](red-green.md). Include the design mapping, assessment dispositions and selected test paths; report each RED reason or the applicable GREEN-before/after exception evidence. Verification-only requests do not create implementation checkpoint or assessment obligations.
-
-Core implementation is complete when the requested implementation is present, design assessment is complete, implementation-critical artifacts agree, and applicable mandatory tests/checks pass on the final state with honest evidence. Verification-only work reports requested checks and actual outcomes without adding implementation obligations. Deferred findings that block requested criteria leave dependent work incomplete. If required documentation, independent review or other downstream obligations remain, identify them and their effect on overall task readiness; do not claim the entire task/MR is complete merely because the core phase passed.
-
-Keep the detailed downstream documentation/Git conventions in [git-documentation.md](git-documentation.md) for later subskill design or an explicit broader request. They do not expand the default core scope.
+Core output, completion criteria and the downstream (documentation, review, handoff) boundary are defined in SKILL.md section 5 and [workflow.md](workflow.md) sections 6–8; downstream conventions are in [git-docs-downstream.md](git-docs-downstream.md).

@@ -23,7 +23,7 @@ Complete when the target and intended change are clear and decisions needed by t
 Trigger: the target/workspace is missing, unsuitable for execution, or applicable instructions/request require preparation. Reuse a suitable supplied/prepared workspace.
 
 - Before code changes, inspect status, staged/unstaged diffs, untracked files, branch, base SHA and worktrees. Preserve existing user work.
-- When preparation is needed, follow [git-documentation.md](git-documentation.md) and the target's workspace rules. Resolve the actual base revision and filesystem location; do not create another worktree merely to repeat a completed setup stage.
+- When preparation is needed, follow [git-docs-downstream.md](git-docs-downstream.md) and the target's workspace rules. Resolve the actual base revision and filesystem location; do not create another worktree merely to repeat a completed setup stage.
 - **Conditional:** obtain required environment access; resolve collisions without overwriting user work. Do not assume untracked requirements are copied into a new worktree.
 
 Output: worktree path, task branch, base SHA and initial-change inventory.
@@ -82,7 +82,7 @@ Complete when the slice passes its criteria, assessment is complete, selected ch
 
 Boundary: these responsibilities are candidates for subskills and are not an obligatory core phase. Exact names/split and invocation remain undecided; no subskill is created here. Required implementation artifacts remain in section 5.
 
-- **Conditional behavior change:** update the owning business/requirements documentation, status and known gaps using [git-documentation.md](git-documentation.md).
+- **Conditional behavior change:** update the owning business/requirements documentation, status and known gaps using [git-docs-downstream.md](git-docs-downstream.md).
 - **Conditional contract change:** align endpoint documents, index, specifications in use and API changelog.
 - **Conditional documentation:** synchronize schema/usage/environment documentation with the implemented change.
 - Perform a separate comprehensive diff review and full handoff when requested/routed through the future subskill design. Record any required downstream work without automatically invoking an unavailable skill.

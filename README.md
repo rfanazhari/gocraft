@@ -144,7 +144,7 @@ The agent stops speculative changes after two unexplained failures, reports the 
 
 - The implemented change and affected code/artifacts
 - Ticket ID (when required)
-- Each phase's commit SHA and actual subject, verified against the full [commit-message convention](references/git-documentation.md#phase-commit-message-gate)
+- Each phase's commit SHA and actual subject, verified against the full [commit-message convention](references/commit-gate.md#phase-commit-message-gate)
 - The exact RED command, working directory and reason for each RED/GREEN unit, or the agreed exception plus pre/post GREEN evidence for existing-contract restructuring
 - Design mapping, assessment findings/dispositions, significant refinements to the supplied design and behavior-preservation limits
 - Local check results, clearly separated into **passed**, **failed**, **blocked / not run**, and **not applicable**
@@ -183,7 +183,9 @@ gocraft/
     ├── testing.md
     ├── red-green.md
     ├── verification.md
-    ├── git-documentation.md
+    ├── verification-extended.md
+    ├── commit-gate.md
+    ├── git-docs-downstream.md
     ├── sources.md              # maintainers: provenance
     └── validation.md           # maintainers: isolation checks
 ```
@@ -207,7 +209,9 @@ Agents load these on demand, not all at once. The full index with ownership and 
 | [testing.md](references/testing.md) | Before adding/editing tests |
 | [red-green.md](references/red-green.md) | Before design/implementation and its checkpoint |
 | [verification.md](references/verification.md) | Planning evidence or accepting results |
-| [git-documentation.md](references/git-documentation.md) | Before every phase commit; workspace recovery or downstream docs/Git work |
+| [verification-extended.md](references/verification-extended.md) | HTTP/real-resource evidence or a blocked/failing check |
+| [commit-gate.md](references/commit-gate.md) | Before every phase commit |
+| [git-docs-downstream.md](references/git-docs-downstream.md) | Workspace recovery or downstream docs/Git work |
 
 **Authority:** explicit user directions govern the work; these references are the agreed base standard; the target repo's own instructions and config establish current implementation facts but do not silently override intended behavior. Material conflicts are recorded and settled before dependent work.
 

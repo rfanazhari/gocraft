@@ -7,7 +7,7 @@ description: Implement and test changes in existing Go projects. Use for feature
 
 Implement the requested change and establish its local test/check results using the bundled standards. Support general Go modules, services and workspaces without depending on the originating repository, a fixed layout, Bazel/Gazelle, a particular Git host or companion skills.
 
-Resolve reference links relative to this file. The [reference index](references/README.md) lists topic ownership; load only topics triggered by the change.
+Resolve reference links relative to this file. The [reference index](references/README.md) lists topic ownership; load only topics triggered by the change. Do NOT read README.md, references/README.md, references/sources.md, references/validation.md or docs/ during task execution (maintainer files).
 
 ## 1. Select the execution path
 
@@ -22,7 +22,7 @@ Explicit user directions govern the work. Read applicable target instructions, i
 
 A ticket ID explicitly supplied by the user is mandatory before change design or task implementation, including RED or characterization test edits. An unambiguous ID in a supplied reference or earlier conversation counts; reuse it without asking again. If missing or ambiguous, ask before the affected work. Never infer it solely from Git history or invent a fallback.
 
-Read [go-standards.md](references/go-standards.md) before changing Go. Apply [architecture.md](references/architecture.md) when mapping responsibilities; preserve existing valid layout and task scope.
+Read [go-standards.md](references/go-standards.md) before changing Go. Read [architecture.md](references/architecture.md) only when adding/moving packages or layers or mapping responsibilities for new code; preserve existing valid layout and task scope.
 
 For every implementation task/slice, read [design-assessment.md](references/design-assessment.md). Before code, briefly confirm invariant ownership, affected responsibilities and preserved contracts using the supplied design and actual code. Reuse existing mappings; resolve material conflicts without restarting a full design phase.
 
@@ -39,7 +39,7 @@ Use clientmanager for outbound HTTP and logmanager for logging; prefer httpmanag
 
 ## 3. Execute the local test-checkpoint protocol
 
-For implementation, read [testing.md](references/testing.md), [red-green.md](references/red-green.md), and the mandatory [phase commit message gate](references/git-documentation.md#phase-commit-message-gate). For the base convention, create every checkpoint through [scripts/phase_commit.py](scripts/phase_commit.py) with `--commit`; it validates type, supplied ticket, Git author, phase and description before invoking Git, then verifies the actual subject. For an explicitly required target convention, use the documented validator path in the gate. Task-plan examples and Git history are evidence, not message-format overrides. Use the gate for both feature/fix and pure-refactor paths.
+For implementation, read [testing.md](references/testing.md), [red-green.md](references/red-green.md), and the mandatory [phase commit message gate](references/commit-gate.md#phase-commit-message-gate). For the base convention, create every checkpoint through [scripts/phase_commit.py](scripts/phase_commit.py) with `--commit`; it validates type, supplied ticket, Git author, phase and description before invoking Git, then verifies the actual subject. For an explicitly required target convention, use the documented validator path in the gate. Task-plan examples and Git history are evidence, not message-format overrides. Use the gate for both feature/fix and pure-refactor paths.
 
 **Refactor task:** establish an existing GREEN baseline, assess the proposed changes and select the path in [red-green.md](references/red-green.md#assessment-selected-work). A new internal contract requires meaningful RED/GREEN with regression checks during integration; restructuring behind existing contracts uses the agreed GREEN test checkpoint → refactor → verified GREEN exception. Fill characterization gaps first and preserve existing product behavior. The exception needs no repeated approval; never manufacture failure.
 

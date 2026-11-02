@@ -21,7 +21,9 @@ The skill entry point is [SKILL.md](../SKILL.md). It defines core execution and 
 | [testing.md](testing.md) | Before adding/editing tests or implementing covered code | TDD, refactors, public tests, fixtures, generated mocks, execution order. |
 | [red-green.md](red-green.md) | Before change design/implementation and initial or assessment-selected checkpoints | Ticket gate, test-path selection, coherent unit granularity, RED scaffolding and staged-snapshot evidence, agreed GREEN-before/after exception. |
 | [verification.md](verification.md) | Planning evidence or accepting results | Test/lint/security gates, runtime evidence, failures, review and handoff. |
-| [git-documentation.md](git-documentation.md) | Before every phase commit; conditional workspace recovery or downstream documentation/Git work | Mandatory message gate, convention discovery and actual-subject verification; conditional workspace/Git and documentation conventions. |
+| [verification-extended.md](verification-extended.md) | Conditional HTTP/real-resource evidence, or a blocked/repeatedly failing check | Runtime evidence rules and the blockers/repeated-failure table. |
+| [commit-gate.md](commit-gate.md) | Before every phase commit | Mandatory message gate, convention discovery and actual-subject verification via the bundled checkpoint command. |
+| [git-docs-downstream.md](git-docs-downstream.md) | Conditional workspace recovery or downstream documentation/Git work | Dedicated workspace, additional Git actions, technical and business documentation conventions. |
 | [sources.md](sources.md) | Auditing or maintaining this package only | Provenance and settled source conflicts. |
 | [validation.md](validation.md) | Reviewing package readiness or maintaining navigation | Isolation checks and limits of validation. |
 

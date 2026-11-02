@@ -12,7 +12,7 @@ Use the supplied context and verification plan directly when sufficient; select 
 | Design assessment | Required for implementation: complete [design-assessment.md](design-assessment.md), including justified dispositions, selected test paths and final-diff reassessment. A simple no-change rationale is valid; verification-only work keeps its requested scope. |
 | Specific tests | Required after test edits, before the applicable unit suite. |
 | TDD | Required for additions/changes in mandatory unit-test directories: tests precede implementation, with context-appropriate RED/GREEN or before/after refactor evidence. |
-| Test checkpoint and ticket | Design/implementation requires the supplied ticket. Record all initial and assessment-selected checkpoints under [red-green.md](red-green.md): meaningful RED/GREEN for features/fixes and new internal contracts, GREEN-before/after for existing-contract restructuring. Each actual subject must pass the [message gate](git-documentation.md#phase-commit-message-gate). Verification-only requests do not add a ticket/checkpoint requirement. |
+| Test checkpoint and ticket | Design/implementation requires the supplied ticket. Record all initial and assessment-selected checkpoints under [red-green.md](red-green.md): meaningful RED/GREEN for features/fixes and new internal contracts, GREEN-before/after for existing-contract restructuring. Each actual subject must pass the [message gate](commit-gate.md#phase-commit-message-gate). Verification-only requests do not add a ticket/checkpoint requirement. |
 | Unit suite | Required: run the target's actual applicable suite, including domain/application responsibilities. Inspect what its command covers. |
 | Runtime packages | Recommended: `go test ./...` from the affected module to cover compilation of runtime packages as well; account for explicit integration tags/resources. |
 | Lint | Required: compatible target lint command, or appropriately configured `golangci-lint run`. |
@@ -47,34 +47,7 @@ If the target provides `make test`, `make lint` or `make test.security`, verify 
 
 This workflow has no Bazel/Gazelle, BUILD-file synchronization, fixed CI provider or image-publication step.
 
-## Conditional HTTP and real-resource evidence
-
-Determine whether HTTP evidence is needed from the task/FSD/design context, criteria and relevant transport/wiring risks. Record the decision, scenarios and why the evidence is required or unnecessary. An endpoint addition/change alone does not mandate smoke testing for every task.
-
-If chosen or explicitly required by the task, use a suitable harness or authorized target command that exercises the relevant real path. A handler test, mocked adapter and full service startup prove different things; name which was exercised.
-
-- Check the actual contract, envelope, access/tenant rules, error paths and side effects relevant to the change.
-- Use target-specific headers, auth and resource configuration; no project-specific identity scheme or login script is assumed.
-- Use bounded startup/request/shutdown times when starting runtime resources and clean them up.
-- Keep secrets in environment configuration and sanitized output. Remote/staging checks and side-effecting requests require supported scope; honor target authentication/rate-limit procedures.
-- A mandatory criterion or accepted required evidence plan cannot silently become not-applicable when resources are missing; report the blocker or obtain an explicit change to that requirement.
-
-Optional integration suites remain opt-in and are not universal merge gates. Their optional status does not justify claiming real SQL/broker behavior from mock tests or omitting an explicitly required runtime criterion.
-
-## Blockers and repeated failures
-
-| Condition | Action | Result status |
-| --- | --- | --- |
-| Missing behavior decision | Search available requirements/target facts, ask a focused question, continue independent work. | Dependent work pending. |
-| Test fails twice without a clear cause | Stop speculative edits; report trigger, expected/actual and command evidence. | Failed; diagnosis pending. |
-| Pre-existing test/lint/security failure | Establish initial/base evidence safely; fix related failures, record independent ones, preserve checks and honest results. | Check still failed; mandatory gate not passed. |
-| Toolchain/tool/network/cache/permission issue | Record command, cwd, error and prerequisite; follow the environment's access process. Do not downgrade tools or disable workspace to hide the issue. | Blocked/not run. |
-| Missing database/broker/upstream resource | State which runtime behavior is unverified and what resource is needed; report mock evidence only within its boundary. | Limited evidence; dependent criterion unproven. |
-| Missing suitable fixture factory | Explain the base/target rule and object requiring a decision; continue independent work. | Dependent test pending. |
-| Incompatible library/shared helper | Record the gap; use a sufficient in-scope adaptation or obtain a broader scope decision. | Integration not passed. |
-| Required fix expands scope | Explain the minimum expansion and consequences; obtain only the missing decision. | Partial result. |
-
-Existing failures can be distinguished from task regressions but cannot be reported as passed. Do not disable checks, change expectations merely to get green, or suppress errors with `|| true`.
+**Conditional:** when HTTP or real-resource evidence is chosen/required, or a check is blocked or fails repeatedly, read [verification-extended.md](verification-extended.md).
 
 ## Own-change verification and brief core result
 
