@@ -30,7 +30,7 @@ Behavioral RED must reflect the intended missing behavior/bug, not a syntax erro
 1. Read the whole file when it is small (about 300 lines or fewer); for larger files read the test table being edited, factory signatures, imports and the mock interfaces it uses.
 2. Identify the exact test-table field names and order.
 3. Read factory signatures and the public operation under test, plus relevant mock interfaces.
-4. Use exact replacement or full-block rewriting for Go edits. Regex shell editing, including `sed`/`awk`, is not allowed.
+4. Use exact replacement or insertion of only the changed entries for Go edits. Regex shell editing, including `sed`/`awk`, is not allowed.
 
 ## Structure and assertions
 
