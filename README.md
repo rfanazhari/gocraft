@@ -126,6 +126,26 @@ Verification only — no implementation, no invented ticket requirement, no RED 
 
 > The ticket IDs above are placeholders. Use your own tracker's format.
 
+### Using subagents
+
+Subagents are optional and need no special syntax; ask for the task as usual. Delegation is used automatically only for a **large change**: 2 or more trigger branches (API/errors, persistence, integrations/events, libraries) or more than 1 package. A small change (1 package, 1 branch) runs directly. See [agents/README.md](agents/README.md) for setup.
+
+| You want | What to do |
+| --- | --- |
+| Exploration and verification delegated on a large change | Just give the task; explorers run before code changes and verifiers after GREEN, when your host supports delegated workers. Otherwise the main agent performs the same roles inline. |
+| A diff review (`go-reviewer`) | Ask explicitly. It is never started automatically. |
+| Independent units in parallel | Ask explicitly. One worker per unit in an isolated working copy (for example a git worktree), each running the full RED→GREEN cycle; the main agent merges and runs the final checks. |
+
+```
+/gocraft PAY-1340: add partial refunds across the API, ledger tables and the settlement event. Use subagents where it helps.
+```
+
+```
+/gocraft PAY-1340: review the diff on this branch with go-reviewer.
+```
+
+The ticket gate, RED/GREEN checkpoints and commits always stay with the main agent.
+
 ## How it runs
 
 1. **Route** — decide between implementation, recovering a *real* context gap, or verification-only ([scope-routing.md](references/scope-routing.md)). If the supplied context is already sufficient, it does not redo analysis.
