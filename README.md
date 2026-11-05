@@ -14,6 +14,7 @@ brief + ticket + existing Go tree → /gocraft → confirm design → RED/GREEN 
 - [Why gocraft](#why-gocraft)
 - [Scope: what it does and doesn't do](#scope-what-it-does-and-doesnt-do)
 - [Install](#install)
+- [Agents](#agents)
 - [Usage](#usage)
 - [How it runs](#how-it-runs)
 - [What the agent reports](#what-the-agent-reports)
@@ -95,6 +96,10 @@ ln -s /path/to/gocraft .claude/skills/gocraft
 
 </details>
 
+## Agents
+
+Optional. [agents/](agents/) contains role definitions (`go-explorer`, `go-verifier`, `go-reviewer`) that [SKILL.md](SKILL.md#subagent-delegation) uses for large changes. A host that supports delegated workers can run them as such; otherwise the main agent performs each role inline, sequentially, using the file as a checklist, so the skill works either way. Schema, capability vocabulary and host mapping: [agents/README.md](agents/README.md).
+
 ## Usage
 
 Start a **new agent session** in the Go project, then either invoke the skill with `/gocraft` (where your agent supports slash-invoked skills) or just describe the task and let the agent pick the skill up from its description.
@@ -165,6 +170,11 @@ The agent stops speculative changes after two unexplained failures, reports the 
 gocraft/
 ├── SKILL.md                    # agent entry point
 ├── README.md                   # you are here
+├── agents/                     # optional role definitions for delegated workers
+│   ├── README.md               # schema, capabilities, host mapping
+│   ├── go-explorer.md
+│   ├── go-verifier.md
+│   └── go-reviewer.md
 ├── scripts/
 │   ├── phase_commit.py         # validate, commit and verify phase subjects
 │   └── test_phase_commit.py    # isolated Git regression tests
